@@ -3,6 +3,8 @@ import Home from "../pages/Home";
 import Feed from "../pages/Feed";
 import WriteConcert from "../pages/WriteConcert";
 import App from "./App";
+import Free from "../pages/Free";
+import Info from "../pages/Info";
 
 const Main = () => {
   return (
@@ -10,7 +12,10 @@ const Main = () => {
       <App>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="feed" element={<Feed />} />
+          <Route path="feed/" element={<Feed />}>
+            <Route path="info" element={<Info />} />
+            <Route path="free" element={<Free />} />
+          </Route>
           <Route path="/writeConcert" element={<WriteConcert />} />
         </Routes>
       </App>

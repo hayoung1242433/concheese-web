@@ -54,8 +54,14 @@ const Nav = () => {
             <NavItem p={(pathname === "/").toString()}>
               <Link to={{ pathname: "/" }}>홈</Link>
             </NavItem>
-            <NavItem p={(pathname === "/feed").toString()}>
-              <Link to={{ pathname: "/feed" }}>커뮤니티</Link>
+            <NavItem
+              p={(
+                pathname === "/feed" ||
+                pathname === "/feed/info" ||
+                pathname === "/feed/free"
+              ).toString()}
+            >
+              <Link to={{ pathname: "/feed/info" }}>커뮤니티</Link>
             </NavItem>
           </NavList>
 

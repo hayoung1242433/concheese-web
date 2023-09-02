@@ -23,7 +23,6 @@ const WriteConcert = () => {
   const [endedAt, setEndedAt] = useState("");
 
   const addPlaceHandler = (e) => {
-    console.log("ee");
     new daum.Postcode({
       oncomplete: function (data) {
         setPlaceList([...placeList, data.zonecode]);
@@ -55,9 +54,10 @@ const WriteConcert = () => {
               style={{
                 width: "60%",
                 border: "none",
-                backgroundColor: "#eee",
+                backgroundColor: "#ffe9d9",
                 padding: "10px 0",
                 borderRadius: "10px",
+                color: "orange",
               }}
               id="title"
               type="text"
