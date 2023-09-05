@@ -54,10 +54,9 @@ const WriteConcert = () => {
               style={{
                 width: "60%",
                 border: "none",
-                backgroundColor: "#ffe9d9",
-                padding: "10px 0",
+                backgroundColor: "#f1f3f5",
+                padding: "10px 3px",
                 borderRadius: "10px",
-                color: "orange",
               }}
               id="title"
               type="text"
@@ -66,14 +65,31 @@ const WriteConcert = () => {
           <div>
             <label htmlFor="title">참고링크:</label>
             <br />
-            <input style={{ width: "60%" }} id="title" type="url" />
+            <input
+              style={{
+                width: "60%",
+                border: "none",
+                backgroundColor: "#f1f3f5",
+                padding: "10px 3px",
+                borderRadius: "10px",
+              }}
+              id="title"
+              type="url"
+            />
           </div>
           <div>
             <label htmlFor="content">공연내용:</label>
             <br />
             <textarea
               id="content"
-              style={{ resize: "none", padding: "5px", width: "70%" }}
+              style={{
+                resize: "none",
+                padding: "5px",
+                width: "70%",
+                border: "none",
+                backgroundColor: "#f1f3f5",
+                borderRadius: "10px",
+              }}
               rows={8}
               placeholder="공연 내용이나 기타 특이사항을 적어주세요."
             ></textarea>
@@ -140,8 +156,7 @@ const WriteConcert = () => {
             <input type="time" />
           </div>
 
-          <p>선예매 유무</p>
-          <input type="checkbox" />
+          <p>선예매가 있을 때만 입력하세요</p>
           <div style={{ margin: "10px 0 20px 0" }}>
             <label htmlFor="ticketDate">선예매 날짜</label>
             <input type="date" />

@@ -40,7 +40,7 @@ const SideLi = styled.li`
   border-radius: 50px;
   color: white;
 
-  background-color: ${(props) => (props.p === "true" ? "orange" : "#aaa")};
+  background-color: ${(props) => (props.p === "true" ? "orange" : "#dee2e6")};
 `;
 
 export default Feed;

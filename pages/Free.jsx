@@ -1,11 +1,10 @@
 import { styled } from "styled-components";
 import { FcGallery } from "react-icons/fc";
-import { MdOutlineTextFields } from "react-icons/md";
-import { useEffect, useState } from "react";
+import profile from "../assets/profile.png";
+import { RiThumbUpFill } from "react-icons/ri";
+import { IoChatbubbleEllipsesSharp } from "react-icons/io5";
 
 export default function Free() {
-  const [headLine, setHeadLine] = useState(14);
-
   return (
     <div>
       <Editor>
@@ -13,7 +12,7 @@ export default function Free() {
           style={{
             paddingBottom: "5px",
             marginBottom: "10px",
-            borderBottom: "1px solid #ddd",
+            borderBottom: "1px solid #eee",
             color: "orange",
             fontSize: "16px",
           }}
@@ -22,13 +21,12 @@ export default function Free() {
         </h3>
         <div style={{ color: "orange" }}>
           <FcGallery style={{ cursor: "pointer", fontSize: "19px" }} />
-          <MdOutlineTextFields
-            onClick={() => setHeadLine(25)}
-            style={{ marginLeft: "10px", fontSize: "19px", cursor: "pointer" }}
-          />
         </div>
         <div>
-          <Textarea style={{ fontSize: `${headLine}px` }}></Textarea>
+          <label for="name">닉네임</label>
+          <Input type="text" id="name" />
+          <label style={{ marginTop: "10px", display: "block" }}>내용</label>
+          <Textarea></Textarea>
         </div>
         <button
           style={{
@@ -44,42 +42,157 @@ export default function Free() {
           게시하기
         </button>
       </Editor>
-      <Comm>
-        <Board>
-          <Box>
-            <h2>에드워드 호퍼: 길 위에서을 보고..</h2>
-            <div>
-              <div>
-                <span>닉네임: </span>
-                <span>춤추는 오소리</span>
-              </div>
-              <p>내용</p>
-            </div>
-          </Box>
-          <Box>
-            <h2>에드워드 호퍼: 길 위에서을 보고..</h2>
-            <div>
-              <div>
-                <span>닉네임: </span>
-                <span>춤추는 오소리</span>
-              </div>
-              <p>내용</p>
-            </div>
-          </Box>
-        </Board>
-      </Comm>
+      <Box>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <div
+            style={{
+              backgroundColor: "orange",
+              padding: "2px",
+              width: "40px",
+              height: "40px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              borderRadius: "50%",
+            }}
+          >
+            <img
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                borderRadius: "50%",
+              }}
+              src={profile}
+            />
+          </div>
+          <div>
+            <p style={{ fontSize: "18px", fontWeight: "bold" }}>Taejin Kim</p>
+            <span style={{ fontSize: "13px", opacity: "0.6" }}>2023-09-03</span>
+          </div>
+        </div>
+        <p style={{ marginTop: "20px" }}>스테이씨 첫 콘서트</p>
+        <div
+          style={{
+            marginTop: "20px",
+            display: "flex",
+            color: "#aaa",
+            paddingTop: "10px",
+            borderTop: "1px solid #eee",
+          }}
+        >
+          <span
+            style={{
+              flexGrow: 1,
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: "5px",
+              justifyContent: "center",
+            }}
+          >
+            <RiThumbUpFill />
+            좋아요
+          </span>
+          <span
+            style={{
+              flexGrow: 1,
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              gap: "5px",
+              justifyContent: "center",
+            }}
+          >
+            <IoChatbubbleEllipsesSharp />
+            댓글달기
+          </span>
+        </div>
+      </Box>
+      <Box>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <div
+            style={{
+              backgroundColor: "orange",
+              padding: "2px",
+              width: "40px",
+              height: "40px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              borderRadius: "50%",
+            }}
+          >
+            <img
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                borderRadius: "50%",
+              }}
+              src={profile}
+            />
+          </div>
+          <div>
+            <p style={{ fontSize: "18px", fontWeight: "bold" }}>Taejin Kim</p>
+            <span style={{ fontSize: "13px", opacity: "0.6" }}>2023-09-03</span>
+          </div>
+        </div>
+        <p style={{ marginTop: "20px" }}>스테이씨 첫 콘서트</p>
+        <div
+          style={{
+            marginTop: "20px",
+            display: "flex",
+            color: "#aaa",
+            paddingTop: "10px",
+            borderTop: "1px solid #eee",
+          }}
+        >
+          <div
+            style={{
+              flexGrow: 1,
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <span
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "5px",
+                cursor: "pointer",
+                width: "fit-content",
+              }}
+            >
+              <RiThumbUpFill />
+              좋아요
+            </span>
+          </div>
+          <div
+            style={{
+              flexGrow: 1,
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <span
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "5px",
+                cursor: "pointer",
+                width: "fit-content",
+              }}
+            >
+              <IoChatbubbleEllipsesSharp />
+              댓글달기
+            </span>
+          </div>
+        </div>
+      </Box>
     </div>
   );
 }
-
-const Comm = styled.div`
-  display: flex;
-  gap: 30px;
-  margin-top: 10px;
-`;
-const Board = styled.div`
-  flex-grow: 1;
-`;
 
 const Box = styled.div`
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
@@ -98,14 +211,24 @@ const Editor = styled.div`
 `;
 
 const Textarea = styled.textarea`
-  margin-top: 10px;
   resize: none;
   border: none;
   border-radius: 10px;
   width: 100%;
-  height: 140px;
+  height: 80px;
   padding: 10px;
-  background-color: #ffe9d9;
+  background-color: #f1f3f5;
+  &:focus {
+    outline: none;
+  }
+`;
+
+const Input = styled.input`
+  width: 100%;
+  border: none;
+  background-color: #f1f3f5;
+  border-radius: 10px;
+  padding: 8px 0;
   &:focus {
     outline: none;
   }
