@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
 import { FcGallery } from "react-icons/fc";
-import profile from "../assets/profile.png";
+import profile from "../assets/profile.jpg";
 import { RiThumbUpFill } from "react-icons/ri";
 import { IoChatbubbleEllipsesSharp } from "react-icons/io5";
 
@@ -71,7 +71,7 @@ export default function Free() {
             <span style={{ fontSize: "13px", opacity: "0.6" }}>2023-09-03</span>
           </div>
         </div>
-        <p style={{ marginTop: "20px" }}>스테이씨 첫 콘서트</p>
+        <p style={{ marginTop: "20px" }}>뉴진스 서울대 콘서트</p>
         <div
           style={{
             marginTop: "20px",
@@ -138,7 +138,7 @@ export default function Free() {
             <span style={{ fontSize: "13px", opacity: "0.6" }}>2023-09-03</span>
           </div>
         </div>
-        <p style={{ marginTop: "20px" }}>스테이씨 첫 콘서트</p>
+        <p style={{ marginTop: "20px" }}>뉴진스 첫 콘서트</p>
         <div
           style={{
             marginTop: "20px",
