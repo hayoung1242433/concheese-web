@@ -20,17 +20,30 @@ const WriteConcert = () => {
   // 날짜 
   const [ticketDate, setTicketDate] = useState("");
   const [startedAt, setStartedAt] = useState("");
-  const [endedAt, setEndedAt] = useState("");
+  const [endedAt, setEndedAt] = useState(""); // api 오면 확인해보기 
+  const [datelist , setDatelist] = useState([]) ; //useEffect용 
   const [click , setClick] = useState( false);
   // 장소
-  const [contetn, setContent] = useState("");
   const [placeList, setPlaceList] = useState([]);
   const [postalList, setPostalList] = useState([]);
+  // 내용
+  const [content, setContent] = useState("");
+  
   // 링크 
   const [link, setLink] = useState("");
  
-  
-  // 장소 & 플레이어 & 장르 
+  // 폼 데이터 업데이트 
+  const handleChange = (event, data ) => {
+    switch (data) {
+      case "genre" : setSelectedGenre(event.target.value); break; // genre 바꾸기  
+      case "title" : setTitle(event.target.value); break;  // title 바꾸기 
+      case "check" : setClick(!click); break; // 선예매 유무에 따라 날짜/ 시간 다르게 나타나게 
+      case "link"   : setLink(event.target.value); break;
+      case "content" : setContent(event.target.value); break; 
+    }
+  }
+
+  // action  
   const addPlaceHandler = (e) => {
     console.log("ee");
     new daum.Postcode({
@@ -46,8 +59,6 @@ const WriteConcert = () => {
     console.log (data1);
     const data2 = placeList.filter( (data) => { return ( data1 !== data) } );
     setPlaceList(data2);
-    // slice로 쪼개기 
-    
   }
 
   const addPlayerHandler = (e) => {
@@ -55,18 +66,9 @@ const WriteConcert = () => {
     setPlayerList([...playerList, player]);
     setPlayer("");
   };
+
   
-  // 몇가지 업데이트 
-  const handleChange = (event ) => {
-    setSelectedGenre(event.target.value); // 지금 선택한 것 
-  }
-  
-  
-  // 선예매 유무에 따라 선예매 날짜/시간 나타나는 것 다름 
-  const onChange = () => {
-    setClick(!click)
-    
-  }
+
   const popup = () => {
     
     return (
@@ -74,21 +76,26 @@ const WriteConcert = () => {
       {click === true && <div style={{ margin : `10px 0 20px 0` , fontSize : '10px' }}>
             <label htmlFor="ticketDate">선예매 날짜</label> / <label htmlFor="time">선예매 시간</label>
             <br/>
-            <input type="date" style = {{border : 'none' , backgroundColor : '#e9ecef', borderRadius : '10px'}} /> / 
-            <input type="time" style = {{border : 'none' , backgroundColor : '#e9ecef', borderRadius : '10px'}} />
+            <Date type = "date" /> ~ <Date type = "date"/> 
+            <br/>
+            <Date type = "time"/> 
           </div> }
        </>    
           )
   } 
   // setReturn 
   const setReturn = (e) => {
+    // if form을 다 작성하지 않은 경우 경고창 뜨게 하기 
      // post 
-     
+     e.preventDefault();
+    console.log("fetch할 예정")
+
   } 
 
   return (
     <Wrapper>
       <Contents style = {{textAlign : "center"}}>
+        <form> 
         <h1 style={{ fontSize: "20px" }}>공연정보 등록</h1>
            <div style={{
             marginTop: "15px",
@@ -96,42 +103,26 @@ const WriteConcert = () => {
             }}
            >
            <label htmlFor="title">제목</label>
-            <Cont id = "title"></Cont> </div> 
+            <Cont id = "title" 
+            style = {{width: "20%",
+                     height : "30%" }}
+            onChange = {(e) => handleChange(e, "title")}/> </div> 
 
-            <div style={{ marginTop: "20px" }}>
-            <p style={{ marginBottom: "20px" }}>장르 </p> 
-            <form> 
-              <label htmlFor = "genre" />
-             <select id = "clickpopup" value = {selectedGenre}
-             onChange = {handleChange}>
-             {genreList.map((v) => {
-              return (
-                <option value = {v}> {v} </option>
-              )
-             }) }
-             </select>
-              </form>
-          </div>
 
           <div style={{ marginTop: "20px" }}>
             <p style={{  display : "flex" }}>가수 
             <div >
-              <form>
+              
                 <label htmlFor="player" />
-                <input
-                  onChange={(e) => { setPlayer(e.target.value) }}
-                  value={player}
-                  style={{
-                    borderRadius: "5px",
-                    border: "1px solid",
-                    padding: "3px",
-                  }}
-                  id="player"
+                <Cont value ={player}
+                    id="player"
+                    style = {{width : " 40%" , height : "50%" , padding : "3px"}}
+                    onChange={(e) => { setPlayer(e.target.value) }}
                 />
                 <Button onClick={addPlayerHandler}>
                   추가
                 </Button>
-              </form>
+              
             </div> 
              </p>
             <div style={{ display: "flex", gap: "3px" }}>
@@ -142,31 +133,52 @@ const WriteConcert = () => {
               } )
               }
             </div>
+
+            <div style={{ marginTop: "20px" , display : "flex"}}>
+            <p style={{ marginBottom: "20px" }}>장르 </p> 
+            
+              <label htmlFor = "genre" />
+              <Select 
+              id = "clickpopup"
+               onChange = {(e) => handleChange(e, "genre")}>
+             {genreList.map((v) => {
+              return (
+                <option value = {v}> {v} </option>
+              )
+             }) }
+             </Select> 
+              
+          </div>
     
 
           <div> 날짜 </div> 
           <p style = {{fontSize : "10px"}}>선예매 유무
-          <input type="checkbox" onClick = {onChange} style= {{margin : "10px" , backgroundColor : '#B5EBEB'}}  /> </p>
+          <input type="checkbox" onClick = {(e) => handleChange(e , "check")} 
+          style= {{margin : "10px" , backgroundColor : '#B5EBEB'}}  /> </p>
           <div > {popup ()} </div> 
 
           <div style={{ margin: "10px 0 20px 0" }}>
             <label htmlFor="ticketDate" style = {{fontSize : "10px" }}>티켓팅 날짜 / 시작 시간 </label>
              <br/> 
-            <input type="date" style = {{margin : "0px 10px 10px 10px" , border : 'none' , backgroundColor  : '#E2E2E2'}} />
-            <span style ={{margin : "10px"}}>  / </span> 
-            <input type="time" style = {{margin : "10px", border : 'none' , backgroundColor : '#E2E2E2'}} />
+             <Date type ="date" /> 
+            <span style ={{margin : "10px"}}>  ~ </span>
+             <Date type = "date"/> 
+             <br/> 
+             <Date type ="time"/> 
           </div>
 
-          <label htmlFor="ticketDate" style = {{fontSize : "10px" }}>공연 날짜</label>
-          <div style={{ margin: "10px 0 20px 0" , borderWidth : "0.5px"}}>
-             <input type="date" style = {{margin : "10px"}} />
-            <span style={{ margin: "10px" }}>~</span>
-            <input type="date" style = {{borderWidth : "0.5px"}} />
-          </div> 
-          
-          <div>
+          <div style={{ margin: "10px 0 20px 0" }}>
+            <label htmlFor="ticketDate" style = {{fontSize : "10px" }}> 공연 날짜 / 시작 시간 </label>
+             <br/> 
+             <Date type ="date" /> 
+            <span style ={{margin : "10px"}}>  ~ </span>
+             <Date type = "date"/> 
+             <br/> 
+             <Date type ="time"/> 
+          </div>
+           <div> 
             <label>공연 장소 [날짜순] </label>
-
+           
             <BsFillPlusCircleFill 
             style= {{cursor : "pointer" ,color : "#008d62"}}
             onClick = {addPlaceHandler} />
@@ -186,16 +198,20 @@ const WriteConcert = () => {
               style={{ resize: "none", padding: "5px", width: "70%" , backgroundColor : "#e9ecef" , border : "none" , borderRadius : "10px" }}
               rows={8}
               placeholder="공연 내용이나 기타 특이사항을 적어주세요."
+              onChange = {(e) => handleChange (e , "content")}
             ></textarea>
           </div>
   
             <div>
             <label htmlFor="title">참고링크</label>
             <br />
-            <input style={{ width: "60%",  borderRadius : "10px"   }} id="title" type="url" />
+            <Cont id ="title" type = "url"
+             style = {{width : "60%" , height : "10%"}}
+            onChange = {(e) => {handleChange(e , "link")}}/>
           </div>
-          <button style = {{backgroundColor : "orange"}} onClick = {() => {setReturn}} >제출하기</button>
-          </div> 
+          <button style = {{backgroundColor : "orange"}} 
+          onClick = {() => {setReturn}} >제출하기</button>
+          </div>  </form> 
       </Contents>
     </Wrapper>
   );
@@ -212,8 +228,6 @@ const Tag = styled.span`
 
 
 const Cont = styled.input`
-width: 20%;
-height : 30%;
 border: none;
 background-color: #e9ecef;
 padding: 10px ;
@@ -227,6 +241,20 @@ padding: 5px;
 border-radius: 10px;
 font-size: 12px;
 cursor: pointer;
+
+`
+const Select = styled.select`
+margin : 5px;
+height :  30%;
+border : none;
+background-color : #e9ecef;
+border-radius : "5px"
+`
+const Date = styled.input`
+type : date;
+border : none;
+background-color : #e9ecef;
+border-radius : 10px;
 
 `
 
