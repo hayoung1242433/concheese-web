@@ -18,10 +18,7 @@ const WriteConcert = () => {
   const [player, setPlayer] = useState("");
   const [playerList, setPlayerList] = useState([]);
   // 날짜 
-  const [ticketDate, setTicketDate] = useState("");
-  const [startedAt, setStartedAt] = useState("");
-  const [endedAt, setEndedAt] = useState(""); // api 오면 확인해보기 
-  const [datelist , setDatelist] = useState([]) ; //useEffect용 
+  const [ticketDate, setTicketDate] = useState({ 1 : {} , 2 : {} , 3 : {}});
   const [click , setClick] = useState( false);
   // 장소
   const [placeList, setPlaceList] = useState([]);
@@ -201,6 +198,8 @@ const WriteConcert = () => {
               onChange = {(e) => handleChange (e , "content")}
             ></textarea>
           </div>
+
+
   
             <div>
             <label htmlFor="title">참고링크</label>

@@ -5,6 +5,7 @@ import { BsFillPencilFill } from "react-icons/bs";
 export default function Info() {
   return (
     <div>
+      
       <Link to={{ pathname: "/writeConcert" }}>
         <Btn style={{ marginLeft: "auto", display: "block" }}>
           <BsFillPencilFill style={{ marginRight: "5px" }} />
