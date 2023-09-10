@@ -5,7 +5,7 @@ import { styled } from "styled-components";
 import {BsFillPlusCircleFill} from "react-icons/bs";
 import {AiOutlineMinusSquare} from "react-icons/ai";
 
-const genretal = ["Concert" , "idol"];
+const genretal = ["idol" , "concert"]
 
 const WriteConcert = () => {
   // form 배치 순
@@ -18,18 +18,20 @@ const WriteConcert = () => {
   const [player, setPlayer] = useState("");
   const [playerList, setPlayerList] = useState([]);
   // 날짜 
-  const [ticketDate, setTicketDate] = useState({ 1 : {} , 2 : {} , 3 : {}});
+  const [dateList , setDateList] = useState(["0","1","2","3","4","5","6","7","8"])
+  const [fullDate, setfullDate] = useState({ 0 : {} , 1 : {} , 2 : {}});
   const [click , setClick] = useState( false);
   // 장소
   const [placeList, setPlaceList] = useState([]);
   const [postalList, setPostalList] = useState([]);
   // 내용
   const [content, setContent] = useState("");
-  
   // 링크 
   const [link, setLink] = useState("");
- 
+
+   
   // 폼 데이터 업데이트 
+  
   const handleChange = (event, data ) => {
     switch (data) {
       case "genre" : setSelectedGenre(event.target.value); break; // genre 바꾸기  
@@ -39,6 +41,49 @@ const WriteConcert = () => {
       case "content" : setContent(event.target.value); break; 
     }
   }
+  // 날짜
+  const setDate = (data, index) => {
+    return new Promise((resolve, reject) => {
+      setDateList((prevDate) => {
+        let updatedDate = [...prevDate];
+        updatedDate[index] = data;
+        return updatedDate;});
+         resolve();
+    }) 
+  }
+  const dateonChange = (e , index) => {
+      let value = index%3;
+      let key = String(index/3);
+      
+     setDate(e.target.value, index)
+     .then(() => {
+      let datelist = {};
+      // 비동기로 박아놨는데 왜 순서대로 진행되지 않는가 
+      switch (value)
+      { case 0 : { dateList.slice(index, index + 3 )
+        .forEach((e , index) => {datelist[index] = e;}) }; break;
+        case 1 :  { dateList.slice(index-1, index + 2 )
+          .forEach((e , index) => {datelist[index] = e;}) }; break;
+        case 2 :  { dateList.slice(index-2, index +1 )
+          .forEach((e , index) => {datelist[index] = e;}) }; break;
+        default: break;
+      }
+    console.log(datelist); // 2022-03-04 => 3,4,5 / 2022-03-05 
+        setdate({key , datelist })
+     })
+    
+    }
+
+      
+  const setdate = ({key , datelist}) => {
+     
+      setfullDate((predate) => {
+        predate.key = {...datelist};})
+      console.log(fullDate);
+      // 왜 숫자가 무한증식하는가 제발 
+     
+  }
+ 
 
   // action  
   const addPlaceHandler = (e) => {
@@ -73,19 +118,16 @@ const WriteConcert = () => {
       {click === true && <div style={{ margin : `10px 0 20px 0` , fontSize : '10px' }}>
             <label htmlFor="ticketDate">선예매 날짜</label> / <label htmlFor="time">선예매 시간</label>
             <br/>
-            <Date type = "date" /> ~ <Date type = "date"/> 
+            <Date type = "date" onChange = {(e) => dateonChange(e,0)} /> ~ <Date type = "date" onChange= {(e) => dateonChange(e,1)}/> 
             <br/>
-            <Date type = "time"/> 
+            <Date type = "time" onChange = {(e) => dateonChange(e,3)} /> 
           </div> }
        </>    
           )
   } 
   // setReturn 
-  const setReturn = (e) => {
-    // if form을 다 작성하지 않은 경우 경고창 뜨게 하기 
-     // post 
-     e.preventDefault();
-    console.log("fetch할 예정")
+  const setReturn = () => {
+    console.log(fullDate);
 
   } 
 
@@ -157,21 +199,21 @@ const WriteConcert = () => {
           <div style={{ margin: "10px 0 20px 0" }}>
             <label htmlFor="ticketDate" style = {{fontSize : "10px" }}>티켓팅 날짜 / 시작 시간 </label>
              <br/> 
-             <Date type ="date" /> 
+             <Date type ="date" onChange = {(e) => dateonChange(e , 3)} /> 
             <span style ={{margin : "10px"}}>  ~ </span>
-             <Date type = "date"/> 
+             <Date type = "date" onChange = {(e) => dateonChange(e , 4)}/> 
              <br/> 
-             <Date type ="time"/> 
+             <Date type ="time" onChange = {(e) =>  dateonChange(e , 5)} /> 
           </div>
 
           <div style={{ margin: "10px 0 20px 0" }}>
             <label htmlFor="ticketDate" style = {{fontSize : "10px" }}> 공연 날짜 / 시작 시간 </label>
              <br/> 
-             <Date type ="date" /> 
+             <Date type ="date" onChange = {(e) => dateonChange(e, 6)} /> 
             <span style ={{margin : "10px"}}>  ~ </span>
-             <Date type = "date"/> 
+             <Date type = "date" onChange = {(e) => dateonChange(e, 7)}/> 
              <br/> 
-             <Date type ="time"/> 
+             <Date type ="time" onChange = {(e) => dateonChange(e, 8)} /> 
           </div>
            <div> 
             <label>공연 장소 [날짜순] </label>

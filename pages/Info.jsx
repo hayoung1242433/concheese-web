@@ -4,17 +4,50 @@ import { BsFillPencilFill } from "react-icons/bs";
 
 export default function Info() {
   return (
-    <div>
-      
+    <>
       <Link to={{ pathname: "/writeConcert" }}>
-        <Btn style={{ marginLeft: "auto", display: "block" }}>
+        <Btn
+          style={{
+            marginTop: "-30px",
+            marginBottom: "10px",
+            marginLeft: "auto",
+            display: "block",
+          }}
+        >
           <BsFillPencilFill style={{ marginRight: "5px" }} />
           공연정보 등록
         </Btn>
       </Link>
-    </div>
+      <div>
+        <L_row>
+          <L_col>
+            <div style={{ backgroundColor: "royalblue" }}>...</div>
+          </L_col>
+          <L_col>
+            <div style={{ backgroundColor: "royalblue" }}>...</div>
+          </L_col>
+          <L_col>
+            <div style={{ backgroundColor: "royalblue" }}>...</div>
+          </L_col>
+          <L_col>
+            <div style={{ backgroundColor: "royalblue" }}>...</div>
+          </L_col>
+        </L_row>
+      </div>
+    </>
   );
 }
+
+const L_row = styled.ul`
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -5px;
+`;
+
+const L_col = styled.li`
+  width: 25%;
+  padding: 0 5px;
+`;
 
 const colorChange = keyframes`
   0%{
