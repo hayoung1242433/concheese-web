@@ -6,25 +6,30 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom"; 
 import {AiFillHeart} from "react-icons/ai";
 import {HiPaperAirplane} from "react-icons/hi";
+import {BsFillCheckCircleFill} from "react-icons/bs";
 const Home = () => {
+  // 문제가 생긴다면 useEffect를 사용하자 
   const [form , setForm] = useState([{title : "Super Shy" , artist : "뉴진스"
-   , genre : "concert" ,ticketdate : "2023/09/02" , date : "2023/09/05" , place : "대전 충남대학교",  url : "https://tickets.interpark.com/goods/23006666"},{title : "LoveDive" , artist : "아이즈원"
-   , genre : "concert" ,ticketdate : "2023/09/02" , date : "2023/09/05" , place : "대전 충남대학교",  url : "https://tickets.interpark.com/goods/23006666"},
+   , genre : "concert" ,ticketdate : "2023/05/02" , date : "2022/09" , place : "대전 충남대학교",  url : "https://tickets.interpark.com/goods/23006666"},{title : "LoveDive" , artist : "아이즈원"
+   , genre : "concert" ,ticketdate : "2023/09/02" , date : "2023/09" , place : "대전 충남대학교",  url : "https://tickets.interpark.com/goods/23006666"},
    {title : "Super Shy" , artist : "르세라핌"
-   , genre : "concert" ,ticketdate : "2023/09/02" , date : "2023/09/05" , place : "대전 충남대학교",  url : "https://tickets.interpark.com/goods/23006666"},
+   , genre : "concert" ,ticketdate : "2023/05/02" , date : "2023/09" , place : "대전 충남대학교",  url : "https://tickets.interpark.com/goods/23006666"},
    {title : "Super Shy" , artist : "방탄소년단"
-   , genre : "concert" ,ticketdate : "2023/09/02" , date : "2023/09/05" , place : "대전 충남대학교",  url : "https://tickets.interpark.com/goods/23006666"},
-   {title : "Super Shy" , artist : "투바투"
-   , genre : "concert" ,ticketdate : "2023/09/02" , date : "2023/09/05" , place : "대전 충남대학교",  url : "https://tickets.interpark.com/goods/23006666"}]);
+   , genre : "concert" ,ticketdate : "2023/09/02" , date : "2023/09" , place : "대전 충남대학교",  url : "https://tickets.interpark.com/goods/23006666"},
+   {title : "Super Shy" , artist : "뉴진스"
+   , genre : "concert" ,ticketdate : "2023/09/02" , date : "2023/08/05" , place : "대전 충남대학교",  url : "https://tickets.interpark.com/goods/23006666"}]);
   const [player , setPlayer] = useState ("");
-  const [playerList , setPlayerList ] = useState([])
+  const [playerList , setPlayerList ] = useState([]);
+  const [date , setDate] = useState("");
+  const [ticketdate , setTicketDate] = useState("")
+  
 
    const playerChange = (e) => {
     e.preventDefault();
-    setPlayerList([...playerList, player])
-    setPlayer("");
-
-    
+    const playerlist = playerList.filter((data) => { return data !== player }) 
+    console.log(playerlist);
+    setPlayerList([...playerlist , player])
+    setPlayer("");   
    }
 
    const playerRender =() => {
@@ -32,9 +37,9 @@ const Home = () => {
     return (
       playerList.map((v) => {
         return( 
-          <Tag key ={v} >{v} <button key= {v} value = {v} 
+          <Tag key ={v} onClick = { () => playerDelete(v)}  >{v} <button key= {v} value = {v} 
           style = {{border : "none" , backgroundColor : "orange" , color : "white"}}
-          onClick = { () => playerDelete(v)} >x</button></Tag> 
+          >x</button></Tag> 
         )
       })
 
@@ -44,14 +49,23 @@ const Home = () => {
   const playerDelete = (v) => {
     setPlayerList( playerList.filter((data) => { return data !== v })) 
   }
+   
+  const setallDate =(e) => {
+    setDate(e.target.value);
+    setTicketDate(e.target.value);
+  }
+ 
 
   const cardRender = () => {
-    const test = (playerList.length !== 0  ) ?  playerList.map((data) => {return form.filter(form => form.artist.includes(data)  )} ).flat() : form;
-    console.log(test);
-    console.log(test.artist);
-    return (test.map ( data => { return (
+    // 필터를 2개 넣기
+    // 필터 수정 // 같은 말을 두번 쓰면 두번 나온다  
+    const test = (date !== "") ?  form.filter(form => {return  form.date.slice(5,7) === date.slice(5) || form.ticketdate.slice(5,7) === date.slice(5)})  : form;
+    const test2 = (playerList.length !== 0  ) ?  playerList.map((data) => {return test.filter( datas => datas.artist.includes(data)  )} ).flat() : test;
+    
+    
+    return (test2.map ( data => { return (
       <L_col>
-        <Mold>
+        <Mold >
       <div style = {{display : "flex"}}>
       <AiFillHeart style ={{color : "orange" }}/> 
       <a href = {data.url}><HiPaperAirplane style = {{color : "grey"}} /> </a> </div> 
@@ -86,11 +100,18 @@ const Home = () => {
       <Contents>
         <div >
         <div style = {{display : "flex"}} > 
-        <input type = "month" /> 
+        <input type = "month" 
+        style ={{ backgroundColor : "#f5f5dc" , border:"none" , borderRadius : "7px" , margin : "5px"}}
+        onChange = { (e) => {setallDate(e)} }/> 
               <div style = {{display : "flex" , gap : "5px"}}>
-              <input value = {player} onChange = {(e) => {setPlayer(e.target.value)}}/> 
-              <button onClick = { playerChange}  >클릭!</button>   
-               {playerRender()}
+              <input 
+              value = {player}
+              style ={{ backgroundColor : "#f5f5dc" , border:"none" , borderRadius : "7px" , margin : "5px"}}
+              onChange = {(e) => {setPlayer(e.target.value)}} /> 
+              <button onClick = { playerChange} 
+              style = {{backgroundColor : "#f5f5dc" , border : "none" , borderRadius : "7px" ,margin : "5px"}}
+              >클릭!</button> 
+              {playerRender()}  
               </div>  </div>
           <L_row>
              {cardRender()}
@@ -117,14 +138,15 @@ height : 300px;
 background-color : #f5f5dc;
 border-radius : 10px;
 overflow : hidden;
-box-shadow : 0.px;
+box-shadow : 1px;
 
 
 `
 const Fonty = styled.div` 
-  font-family :  'Poller One', cursive;
+  font-family: 'Bungee', cursive;
+   font-family: 'Ultra', serif;
   height : 150px;
-  url : 'https://fonts.googleapis.com/css2?family=Poller+One&display=swap';
+  url : 'https://fonts.googleapis.com/css2?family=Bungee&family=Ultra&display=swap';
   font-size : 33px;
   background-color : #ffffff;
   text-align : center;

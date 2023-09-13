@@ -19,7 +19,7 @@ const WriteConcert = () => {
   const [playerList, setPlayerList] = useState([]);
   // 날짜 
   const [dateList , setDateList] = useState(["0","1","2","3","4","5","6","7","8"])
-  const [fullDate, setfullDate] = useState({ 0 : {} , 1 : {} , 2 : {}});
+  const [fullDate, setfullDate] = useState();
   const [click , setClick] = useState( false);
   // 장소
   const [placeList, setPlaceList] = useState([]);
@@ -28,11 +28,14 @@ const WriteConcert = () => {
   const [content, setContent] = useState("");
   // 링크 
   const [link, setLink] = useState("");
+  // 제출 
+  const [submit , setSubmit] = useState(false);
 
    
   // 폼 데이터 업데이트 
   
-  const handleChange = (event, data ) => {
+  const handleChange = (event ) => {
+    const data = event.target.id;
     switch (data) {
       case "genre" : setSelectedGenre(event.target.value); break; // genre 바꾸기  
       case "title" : setTitle(event.target.value); break;  // title 바꾸기 
@@ -42,52 +45,28 @@ const WriteConcert = () => {
     }
   }
   // 날짜
-  const setDate = (data, index) => {
-    return new Promise((resolve, reject) => {
-      setDateList((prevDate) => {
-        let updatedDate = [...prevDate];
-        updatedDate[index] = data;
-        return updatedDate;});
-         resolve();
-    }) 
-  }
-  const dateonChange = (e , index) => {
-      let value = index%3;
-      let key = String(index/3);
-      
-     setDate(e.target.value, index)
-     .then(() => {
-      let datelist = {};
-      // 비동기로 박아놨는데 왜 순서대로 진행되지 않는가 
-      switch (value)
-      { case 0 : { dateList.slice(index, index + 3 )
-        .forEach((e , index) => {datelist[index] = e;}) }; break;
-        case 1 :  { dateList.slice(index-1, index + 2 )
-          .forEach((e , index) => {datelist[index] = e;}) }; break;
-        case 2 :  { dateList.slice(index-2, index +1 )
-          .forEach((e , index) => {datelist[index] = e;}) }; break;
-        default: break;
-      }
-    console.log(datelist); // 2022-03-04 => 3,4,5 / 2022-03-05 
-        setdate({key , datelist })
-     })
+  const dateonChange = (e) => {
     
-    }
-
-      
-  const setdate = ({key , datelist}) => {
-     
-      setfullDate((predate) => {
-        predate.key = {...datelist};})
-      console.log(fullDate);
-      // 왜 숫자가 무한증식하는가 제발 
-     
+    const nextDate = dateList.map((prev , i) =>{
+     let a = ( i === parseInt( e.target.id ) ) ? prev= e.target.value  : prev
+     return a;
+    })
+    
+    setDateList(nextDate);
   }
- 
+  // click 시 날짜 변경 
+  const dateChange = () => {
+    setfullDate(() => { 
+      return {
+        
+        first : dateList.slice(0,3) 
+        , second : dateList.slice(3, 6) 
+        , third : dateList.slice(6,9)}
+    })
+  }
 
-  // action  
+  // 장소 
   const addPlaceHandler = (e) => {
-    console.log("ee");
     new daum.Postcode({
       oncomplete: function (data) {
         // 날짜당 
@@ -118,16 +97,17 @@ const WriteConcert = () => {
       {click === true && <div style={{ margin : `10px 0 20px 0` , fontSize : '10px' }}>
             <label htmlFor="ticketDate">선예매 날짜</label> / <label htmlFor="time">선예매 시간</label>
             <br/>
-            <Date type = "date" onChange = {(e) => dateonChange(e,0)} /> ~ <Date type = "date" onChange= {(e) => dateonChange(e,1)}/> 
+            <Date  id = "0" type = "date" onChange = {dateonChange} /> ~ <Date id = "1" type = "date" onChange= {dateonChange}/> 
             <br/>
-            <Date type = "time" onChange = {(e) => dateonChange(e,3)} /> 
+            <Date id = "2" type = "time" onChange = {dateonChange} /> 
           </div> }
        </>    
           )
   } 
   // setReturn 
   const setReturn = () => {
-    console.log(fullDate);
+    console.log(dateList)
+    
 
   } 
 
@@ -145,7 +125,7 @@ const WriteConcert = () => {
             <Cont id = "title" 
             style = {{width: "20%",
                      height : "30%" }}
-            onChange = {(e) => handleChange(e, "title")}/> </div> 
+            onChange = {handleChange}/> </div> 
 
 
           <div style={{ marginTop: "20px" }}>
@@ -178,8 +158,8 @@ const WriteConcert = () => {
             
               <label htmlFor = "genre" />
               <Select 
-              id = "clickpopup"
-               onChange = {(e) => handleChange(e, "genre")}>
+              id = "genre"
+               onChange = {handleChange}>
              {genreList.map((v) => {
               return (
                 <option value = {v}> {v} </option>
@@ -192,28 +172,28 @@ const WriteConcert = () => {
 
           <div> 날짜 </div> 
           <p style = {{fontSize : "10px"}}>선예매 유무
-          <input type="checkbox" onClick = {(e) => handleChange(e , "check")} 
+          <input id = "check" type="checkbox" onClick = {handleChange} 
           style= {{margin : "10px" , backgroundColor : '#B5EBEB'}}  /> </p>
           <div > {popup ()} </div> 
 
           <div style={{ margin: "10px 0 20px 0" }}>
             <label htmlFor="ticketDate" style = {{fontSize : "10px" }}>티켓팅 날짜 / 시작 시간 </label>
              <br/> 
-             <Date type ="date" onChange = {(e) => dateonChange(e , 3)} /> 
+             <Date id = "3" type ="date" onChange = {dateonChange} /> 
             <span style ={{margin : "10px"}}>  ~ </span>
-             <Date type = "date" onChange = {(e) => dateonChange(e , 4)}/> 
+             <Date id = "4" type = "date" onChange = {dateonChange}/> 
              <br/> 
-             <Date type ="time" onChange = {(e) =>  dateonChange(e , 5)} /> 
+             <Date id = "5" type ="time" onChange = {dateonChange} /> 
           </div>
 
           <div style={{ margin: "10px 0 20px 0" }}>
             <label htmlFor="ticketDate" style = {{fontSize : "10px" }}> 공연 날짜 / 시작 시간 </label>
              <br/> 
-             <Date type ="date" onChange = {(e) => dateonChange(e, 6)} /> 
+             <Date id ="6" type ="date" onChange = {dateonChange} /> 
             <span style ={{margin : "10px"}}>  ~ </span>
-             <Date type = "date" onChange = {(e) => dateonChange(e, 7)}/> 
+             <Date id = "7" type = "date" onChange = {dateonChange}/> 
              <br/> 
-             <Date type ="time" onChange = {(e) => dateonChange(e, 8)} /> 
+             <Date id = "8" type ="time" onChange = {dateonChange} /> 
           </div>
            <div> 
             <label>공연 장소 [날짜순] </label>
@@ -237,7 +217,7 @@ const WriteConcert = () => {
               style={{ resize: "none", padding: "5px", width: "70%" , backgroundColor : "#e9ecef" , border : "none" , borderRadius : "10px" }}
               rows={8}
               placeholder="공연 내용이나 기타 특이사항을 적어주세요."
-              onChange = {(e) => handleChange (e , "content")}
+              onChange = {handleChange}
             ></textarea>
           </div>
 
@@ -246,12 +226,12 @@ const WriteConcert = () => {
             <div>
             <label htmlFor="title">참고링크</label>
             <br />
-            <Cont id ="title" type = "url"
+            <Cont id ="link" type = "url"
              style = {{width : "60%" , height : "10%"}}
-            onChange = {(e) => {handleChange(e , "link")}}/>
+            onChange = {handleChange}/>
           </div>
           <button style = {{backgroundColor : "orange"}} 
-          onClick = {() => {setReturn}} >제출하기</button>
+          onClick = {() => {setSubmit(prev => !prev )}} >제출하기</button>
           </div>  </form> 
       </Contents>
     </Wrapper>
