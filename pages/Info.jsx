@@ -18,36 +18,9 @@ export default function Info() {
           공연정보 등록
         </Btn>
       </Link>
-      <div>
-        <L_row>
-          <L_col>
-            <div style={{ backgroundColor: "royalblue" }}>...</div>
-          </L_col>
-          <L_col>
-            <div style={{ backgroundColor: "royalblue" }}>...</div>
-          </L_col>
-          <L_col>
-            <div style={{ backgroundColor: "royalblue" }}>...</div>
-          </L_col>
-          <L_col>
-            <div style={{ backgroundColor: "royalblue" }}>...</div>
-          </L_col>
-        </L_row>
-      </div>
     </>
   );
 }
-
-const L_row = styled.ul`
-  display: flex;
-  flex-wrap: wrap;
-  margin: 0 -5px;
-`;
-
-const L_col = styled.li`
-  width: 25%;
-  padding: 0 5px;
-`;
 
 const colorChange = keyframes`
   0%{
