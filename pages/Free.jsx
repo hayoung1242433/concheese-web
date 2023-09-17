@@ -38,17 +38,7 @@ export default function Free() {
   return (
     <div>
       <Editor>
-        <h3
-          style={{
-            paddingBottom: "5px",
-            marginBottom: "10px",
-            borderBottom: "1px solid #eee",
-            color: "orange",
-            fontSize: "16px",
-          }}
-        >
-          자유주제
-        </h3>
+        <EditorTitle style={{}}>자유주제</EditorTitle>
         <div>
           <label htmlFor="name">닉네임</label>
           <Input
@@ -72,6 +62,7 @@ export default function Free() {
             <FreeCard
               id={item.postId}
               date={item.createdAt}
+              username={item.title}
               content={item.content}
             />
           </Box>
@@ -95,6 +86,14 @@ const Editor = styled.div`
   border-radius: 10px;
   margin-bottom: 30px;
   box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.1);
+`;
+
+const EditorTitle = styled.h3`
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #eee;
+  color: orange;
+  fontsize: 16px;
 `;
 
 const Textarea = styled.textarea`
