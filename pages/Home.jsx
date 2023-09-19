@@ -5,13 +5,13 @@ import { BsFillPencilFill } from "react-icons/bs";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom"; 
 import {AiFillHeart} from "react-icons/ai";
-import {HiPaperAirplane} from "react-icons/hi";
-import {BsFillCheckCircleFill} from "react-icons/bs";
+import {BsBookmarkStarFill} from "react-icons/bs";
+
 const Home = () => {
   // 문제가 생긴다면 useEffect를 사용하자 
   const [form , setForm] = useState([{title : "Super Shy" , artist : "뉴진스"
    , genre : "concert" ,ticketdate : "2023/05/02" , date : "2022/09" , place : "대전 충남대학교",  url : "https://tickets.interpark.com/goods/23006666"},{title : "LoveDive" , artist : "아이즈원"
-   , genre : "concert" ,ticketdate : "2023/09/02" , date : "2023/09" , place : "대전 충남대학교",  url : "https://tickets.interpark.com/goods/23006666"},
+   , genre : "concert" ,ticketdate : "2023/09/02" , date : "2023/08" , place : "대전 충남대학교",  url : "https://tickets.interpark.com/goods/23006666"},
    {title : "Super Shy" , artist : "르세라핌"
    , genre : "concert" ,ticketdate : "2023/05/02" , date : "2023/09" , place : "대전 충남대학교",  url : "https://tickets.interpark.com/goods/23006666"},
    {title : "Super Shy" , artist : "방탄소년단"
@@ -57,23 +57,26 @@ const Home = () => {
  
 
   const cardRender = () => {
-    // 필터를 2개 넣기
-    // 필터 수정 // 같은 말을 두번 쓰면 두번 나온다  
-    const test = (date !== "") ?  form.filter(form => {return  form.date.slice(5,7) === date.slice(5) || form.ticketdate.slice(5,7) === date.slice(5)})  : form;
+    
+    const test = (date !== "") ?  form.filter(form => {return (form.date.slice(0,4) + form.date.slice(5,7)) === (date.slice(0,4) + date.slice(5,7))
+       ||  (form.ticketdate.slice(0,4) + form.ticketdate.slice(5,7)) === (date.slice(0,4) + date.slice(5,7))})  : form;
     const test2 = (playerList.length !== 0  ) ?  playerList.map((data) => {return test.filter( datas => datas.artist.includes(data)  )} ).flat() : test;
     
     
     return (test2.map ( data => { return (
       <L_col>
         <Mold >
-      <div style = {{display : "flex"}}>
+
+        <div style = {{display : "flex"}}>
       <AiFillHeart style ={{color : "orange" }}/> 
-      <a href = {data.url}><HiPaperAirplane style = {{color : "grey"}} /> </a> </div> 
+      <a href = {data.url}><BsBookmarkStarFill style = {{color : "#bebebe"}} /></a>
+      </div> 
       <Fonty style = {{wordBreak : "normal"}}>{data.title} </Fonty>
-     
+      
        <li style = {{fontSize : "12px" ,fontWeight : "bold" , margin : "0px 0px 0px 5px"}}> {data.artist} </li> 
+       
        <div style = {{display : "flex" }}>
-       <p style = {{fontSize : "10px" ,margin: "0px 10px 0px 5px" , fontWeight : "bold" }}>
+       <p style = {{fontSize : "11px" ,margin: "0px 10px 0px 5px" , fontWeight : "bold" }}>
         genre <br/>
         ticketdate <br/>
         date <br/> 
@@ -98,7 +101,7 @@ const Home = () => {
     
     <Wrapper>
       <Contents>
-        <div >
+        <div>
         <div style = {{display : "flex"}} > 
         <input type = "month" 
         style ={{ backgroundColor : "#f5f5dc" , border:"none" , borderRadius : "7px" , margin : "5px"}}
@@ -122,6 +125,8 @@ const Home = () => {
   );
 };
 
+
+
 const L_row = styled.ul`
   display: flex;
   flex-wrap: wrap;
@@ -138,9 +143,7 @@ height : 300px;
 background-color : #f5f5dc;
 border-radius : 10px;
 overflow : hidden;
-box-shadow : 1px;
-
-
+border : none;
 `
 const Fonty = styled.div` 
   font-family: 'Bungee', cursive;
