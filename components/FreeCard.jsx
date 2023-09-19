@@ -8,19 +8,19 @@ import { deletePost, updatePost } from "../api/api";
 
 export default function FreeCard({ id, date, content, username }) {
   // update,delete할 때 id필요
-  const [createdAt, setCreatedAt] = useState(date);
+  // const [createdAt, setCreatedAt] = useState(date);
   const [canEdit, setCanEdit] = useState(false);
   const [canUpdate, setCanUpdate] = useState(false);
   const [newContent, setNewContent] = useState(content);
 
-  const getDate = () => {
-    let result;
-    const date = new Date(createdAt);
-    result = `${date.getFullYear()}-${
-      date.getMonth() + 1
-    }-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
-    return result;
-  };
+  // const getDate = () => {
+  //   let result;
+  //   const date = new Date(createdAt);
+  //   result = `${date.getFullYear()}-${
+  //     date.getMonth() + 1
+  //   }-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
+  //   return result;
+  // };
 
   const deleteHandler = (id) => {
     try {
@@ -68,7 +68,9 @@ export default function FreeCard({ id, date, content, username }) {
         </ProfileCover>
         <div>
           <p style={{ fontSize: "18px", fontWeight: "bold" }}>{username}</p>
-          <span style={{ fontSize: "13px", opacity: "0.6" }}>{getDate()}</span>
+          <span
+            style={{ fontSize: "13px", opacity: "0.6" }}
+          >{`${date[0]}-${date[1]}-${date[2]} ${date[3]}:${date[4]}`}</span>
         </div>
         <div style={{ marginLeft: "auto", cursor: "pointer" }}>
           <HiDotsVertical onClick={() => setCanEdit((c) => !c)} />

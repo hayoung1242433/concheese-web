@@ -22,6 +22,10 @@ export default function Free() {
   }, []);
 
   const addPost = () => {
+    if (!content) {
+      alert("내용을 입력해주세요");
+      return;
+    }
     try {
       writeFreePost({
         category: "FREE",

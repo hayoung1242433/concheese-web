@@ -3,6 +3,50 @@ import logo from "../assets/logo-second.png";
 import styled from "styled-components";
 import { Link, useLocation } from "react-router-dom";
 
+const Nav = () => {
+  const { pathname } = useLocation();
+  return (
+    <Navbar>
+      <Wrapper>
+        <NavContents>
+          <Link to={{ pathname: "/" }}>
+            <img width="32" src={logo} />
+          </Link>
+
+          <NavList>
+            <NavItem p={(pathname === "/").toString()}>
+              <Link to={{ pathname: "/" }}>홈</Link>
+            </NavItem>
+            <NavItem
+              p={(
+                pathname === "/feed" ||
+                pathname === "/feed/info" ||
+                pathname === "/feed/free"
+              ).toString()}
+            >
+              <Link to={{ pathname: "/feed/info" }}>커뮤니티</Link>
+            </NavItem>
+          </NavList>
+
+          <LogInBtn>
+            <Link
+              style={{
+                display: "block",
+                padding: "10px 20px",
+                backgroundColor: "white",
+                border: "1px solid #f49c5d",
+              }}
+              to={{ pathname: "/login" }}
+            >
+              로그인
+            </Link>
+          </LogInBtn>
+        </NavContents>
+      </Wrapper>
+    </Navbar>
+  );
+};
+
 const Navbar = styled.nav`
   border-bottom: 1px solid #eee;
 `;
@@ -33,43 +77,7 @@ const NavItem = styled.li`
 const LogInBtn = styled.button`
   border: none;
   font-weight: bold;
-  padding: 10px 20px;
   border-radius: 10px;
-  border: 1px solid #f49c5d;
-
-  background-color: white;
 `;
-
-const Nav = () => {
-  const { pathname } = useLocation();
-  return (
-    <Navbar>
-      <Wrapper>
-        <NavContents>
-          <Link to={{ pathname: "/" }}>
-            <img width="32" src={logo} />
-          </Link>
-
-          <NavList>
-            <NavItem p={(pathname === "/").toString()}>
-              <Link to={{ pathname: "/" }}>홈</Link>
-            </NavItem>
-            <NavItem
-              p={(
-                pathname === "/feed" ||
-                pathname === "/feed/info" ||
-                pathname === "/feed/free"
-              ).toString()}
-            >
-              <Link to={{ pathname: "/feed/info" }}>커뮤니티</Link>
-            </NavItem>
-          </NavList>
-
-          <LogInBtn>로그인</LogInBtn>
-        </NavContents>
-      </Wrapper>
-    </Navbar>
-  );
-};
 
 export default Nav;

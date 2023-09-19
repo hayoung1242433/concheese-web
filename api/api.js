@@ -41,6 +41,7 @@ export async function updatePost(id, formData) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(formData),
+    credentials: "include",
   });
 
   if (!response.ok) {
@@ -52,11 +53,12 @@ export async function updatePost(id, formData) {
 }
 
 export async function deletePost(id) {
-  const url = `http://swacademy.null0xff.com:8080/api/v1/community/post/${id}`;
-  console.log(url);
-  const response = await fetch(url, {
-    method: "DELETE",
-  });
+  const response = await fetch(
+    `http://swacademy.null0xff.com:8080/api/v1/community/post/${id}`,
+    {
+      method: "DELETE",
+    }
+  );
   if (!response.ok) {
     throw new Error("error");
   }
