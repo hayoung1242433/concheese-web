@@ -2,19 +2,19 @@ import { useState } from "react";
 import Contents from "../layout/Contents";
 import Wrapper from "../layout/Wrapper";
 import { styled } from "styled-components";
-import {BsFillPlusCircleFill} from "react-icons/bs";
-import {AiOutlineMinusSquare} from "react-icons/ai";
+import { BsFillPlusCircleFill } from "react-icons/bs";
+import { AiOutlineMinusSquare } from "react-icons/ai";
 
 const genretal = ["idol" , "concert"]
 
 const WriteConcert = () => {
   // form 배치 순
-  // 제목  
+  // 제목
   const [title, setTitle] = useState("");
   // 장르
   const [genreList, setGenreList] = useState([...genretal]);
-  const [selectedGenre , setSelectedGenre] = useState('');
-  // 가수 
+  const [selectedGenre, setSelectedGenre] = useState("");
+  // 가수
   const [player, setPlayer] = useState("");
   const [playerList, setPlayerList] = useState([]);
   // 날짜 
@@ -69,18 +69,20 @@ const WriteConcert = () => {
   const addPlaceHandler = (e) => {
     new daum.Postcode({
       oncomplete: function (data) {
-        // 날짜당 
+        // 날짜당
         setPlaceList([...placeList, data.roadAddress]);
       },
-    }).open(); 
+    }).open();
   };
 
   const subPlaceHandler = (e) => {
-    const data1 = e;  // {}로 묶인 함수와 함수의 차이 event를 자동으로 받느냐 아니냐 차이 
-    console.log (data1);
-    const data2 = placeList.filter( (data) => { return ( data1 !== data) } );
+    const data1 = e; // {}로 묶인 함수와 함수의 차이 event를 자동으로 받느냐 아니냐 차이
+    console.log(data1);
+    const data2 = placeList.filter((data) => {
+      return data1 !== data;
+    });
     setPlaceList(data2);
-  }
+  };
 
   const addPlayerHandler = (e) => {
     e.preventDefault();
@@ -88,10 +90,7 @@ const WriteConcert = () => {
     setPlayer("");
   };
 
-  
-
   const popup = () => {
-    
     return (
       <> 
       {click === true && <div style={{ margin : `10px 0 20px 0` , fontSize : '10px' }}>
@@ -113,12 +112,13 @@ const WriteConcert = () => {
 
   return (
     <Wrapper>
-      <Contents style = {{textAlign : "center"}}>
-        <form> 
-        <h1 style={{ fontSize: "20px" }}>공연정보 등록</h1>
-           <div style={{
-            marginTop: "15px",
-            maxWidth: "500px",
+      <Contents style={{ textAlign: "center" }}>
+        <form>
+          <h1 style={{ fontSize: "20px" }}>공연정보 등록</h1>
+          <div
+            style={{
+              marginTop: "15px",
+              maxWidth: "500px",
             }}
            >
            <label htmlFor="title">제목</label>
@@ -129,28 +129,29 @@ const WriteConcert = () => {
 
 
           <div style={{ marginTop: "20px" }}>
-            <p style={{  display : "flex" }}>가수 
-            <div >
-              
+            <p style={{ display: "flex" }}>
+              가수
+              <div>
                 <label htmlFor="player" />
-                <Cont value ={player}
-                    id="player"
-                    style = {{width : " 40%" , height : "50%" , padding : "3px"}}
-                    onChange={(e) => { setPlayer(e.target.value) }}
+                <Cont
+                  value={player}
+                  id="player"
+                  style={{ width: " 40%", height: "50%", padding: "3px" }}
+                  onChange={(e) => {
+                    setPlayer(e.target.value);
+                  }}
                 />
-                <Button onClick={addPlayerHandler}>
-                  추가
-                </Button>
-              
-            </div> 
-             </p>
+                <Button onClick={addPlayerHandler}>추가</Button>
+              </div>
+            </p>
             <div style={{ display: "flex", gap: "3px" }}>
-              {playerList.filter((v) => {
-                return v.length > 0})
-              .map((data) => {
-                return <Tag>{data}</Tag>;
-              } )
-              }
+              {playerList
+                .filter((v) => {
+                  return v.length > 0;
+                })
+                .map((data) => {
+                  return <Tag>{data}</Tag>;
+                })}
             </div>
 
             <div style={{ marginTop: "20px" , display : "flex"}}>
@@ -239,44 +240,41 @@ const WriteConcert = () => {
 };
 
 const Tag = styled.span`
-  background-color : orange;
-  color : white;
+  background-color: orange;
+  color: white;
   padding: 5px 10px;
   border-radius: 10px;
   font-size: 12px;
   cursor: pointer;
 `;
 
-
 const Cont = styled.input`
-border: none;
-background-color: #e9ecef;
-padding: 10px ;
-border-radius: 10px;
-margin : 10px 10px 15px;
-`
+  border: none;
+  background-color: #e9ecef;
+  padding: 10px;
+  border-radius: 10px;
+  margin: 10px 10px 15px;
+`;
 const Button = styled.button`
-margin-left: 10px;
-border: none;
-padding: 5px;
-border-radius: 10px;
-font-size: 12px;
-cursor: pointer;
-
-`
+  margin-left: 10px;
+  border: none;
+  padding: 5px;
+  border-radius: 10px;
+  font-size: 12px;
+  cursor: pointer;
+`;
 const Select = styled.select`
-margin : 5px;
-height :  30%;
-border : none;
-background-color : #e9ecef;
-border-radius : "5px"
-`
+  margin: 5px;
+  height: 30%;
+  border: none;
+  background-color: #e9ecef;
+  border-radius: "5px";
+`;
 const Date = styled.input`
-type : date;
-border : none;
-background-color : #e9ecef;
-border-radius : 10px;
-
-`
+  type: date;
+  border: none;
+  background-color: #e9ecef;
+  border-radius: 10px;
+`;
 
 export default WriteConcert;

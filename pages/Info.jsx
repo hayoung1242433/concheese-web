@@ -122,25 +122,10 @@ export default function Info() {
           <BsFillPencilFill style={{ marginRight: "5px" }} />
           공연정보 등록
         </Btn>
-      </Link>  
-      {makeForm()}
+      </Link>
     </>
   );
 }
-
-const L_row = styled.ul`
-  display: flex;
-  flex-wrap: wrap;
-  margin: 0 -5px;
-`;
-
-const L_col = styled.li`
-  width: 25%;
-  padding: 0 5px;
-`;
-
-
-
 
 const colorChange = keyframes`
   0%{

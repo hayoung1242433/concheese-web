@@ -5,6 +5,7 @@ import WriteConcert from "../pages/WriteConcert";
 import App from "./App";
 import Free from "../pages/Free";
 import Info from "../pages/Info";
+import Login from "../pages/Login";
 
 const Main = () => {
   return (
@@ -12,6 +13,7 @@ const Main = () => {
       <App>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="login" element={<Login />} />
           <Route path="feed/" element={<Feed />}>
             <Route path="info" element={<Info />} />
             <Route path="free" element={<Free />} />

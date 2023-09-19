@@ -11,7 +11,7 @@ export default function Free() {
         <h3
           style={{
             paddingBottom: "5px",
-            marginBottom: "10px",
+            marginBottom:  "10px",
             borderBottom: "1px solid #eee",
             color: "orange",
             fontSize: "16px",
