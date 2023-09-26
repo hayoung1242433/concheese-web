@@ -5,15 +5,22 @@ import {AiOutlineHeart} from "react-icons/ai";
 import {RiAlarmWarningLine} from "react-icons/ri";
 import {useState} from 'react';
 import {AiFillCheckCircle} from "react-icons/ai"
-
+import Profile from "../assets/profile.jpg"
+import {deleteInfoPost , getInfoPosts} from "../api/api2"
 export default function Info() {
   const [alarm , setAlarm ] = useState(0);
   const [artist, setArtist] = useState("");
-  const [artistList , setArtistList] = useState([])
+  const [artistList , setArtistList] = useState([]);
+  const [form , setForm] = useState();
 
-   const checkAlarm = () => {
-    (alarm > 10 ) ? console.log("삭제 예정") : setAlarm ((pre) => {return pre +=1;})
-    // 해당 id의 녀석의 alarm을 삭제예정 
+   const checkAlarm = (value) => {
+    setAlarm ((pre) => {return pre +=1;})
+    (alarm > 10 ) ? console.log("삭제 예정") : deletePosts(value);
+    
+   }
+   const deletePosts = () => {
+    try{ deleteInfoPost(id)}
+    catch(err) {console.err(err)}
    }
   
    const artistListchange = () => {
@@ -41,62 +48,54 @@ export default function Info() {
   const makeForm = () => {
 
     return ( 
+      form.map( (form) => {
       <div>
-      <div style = {{display :"flex"}}>
-      <input value = {artist} 
-      style ={{border : "none" , borderRadius : "8px" ,
-      margin : "5px",
-      backgroundColor : "#f5f5dc"}}
-      onChange = {(e) => {setArtist(e.target.value)}} /> 
-      <AiFillCheckCircle  
-      style ={{ margin : "5px"}}
-      onClick = {() => {artistListchange()}}></AiFillCheckCircle>
-      
+      <div style = {{display :"flex"}}>  
       <div style ={{ display : "flex" , gap : "3px" }}>
       {artistRender()}
       </div> </div> 
       <Mold> 
       <div>    
       <div style ={{display : "flex"}}>
-       <Image>
-           <Image2/>
-          </Image>
-          <p style={{ fontSize: "18px" }}>Taejin Kim</p>
+       <img src={Profile} 
+       style={{width:"100%" , borderRadius : "8px"}}/> 
+        
+      </div>
+        <div>
+          <p style={{ fontSize: "18px" }}>{form.title}</p>
+          <div style = {{borderBottom : "1px solid #eee"}}></div>
         <span style={{ fontSize: "13px", opacity: "0.6" ,
-         position : "relative" , left : "5px" , top : "5px" }}>2023-09-03</span>
-        </div>
-       <div style = {{borderBottom : "1px solid #eee"}}></div>
+         position : "relative" , left : "5px" , top : "5px" }}>{form.date}</span>
+         </div>  
+       
        <Im>뉴진스</Im>
        <div style = {{display :"flex"}}>
        <h3 style = {{ 
        margin : "5px 0px 5px 8px"}}>뉴진스 투어 </h3>
       < RiAlarmWarningLine 
       style = {{ margin : "9px 0px 5px 5px"}}
-      onClick = {() => {checkAlarm}}/>
+     />
        </div> 
       
      
      <Content>
       <p style ={{ margin :"20px"}}> 
-        장르 <br/> 
-        선예매 날짜 <br/>
+        장르 <br/>
+        concert<br/> 
+        선예매 날짜 / 시간 <br/>
+        {}<br/> 
         티켓팅 날짜 <br/> 
+        2023-09-04<br/> 
         공연 날짜 <br/>
+        2023-09-05
         공연 장소 <br/>
+        충남대학교 concertHall
         가격 <br/>
+        5만원
         링크 <br/> 
-        내용 
+        www.html.dkdkkd
         </p> 
-        <p style ={{ margin :"20px"}}> 
-        장르 <br/> 
-        선예매 날짜 <br/>
-        티켓팅 날짜 <br/> 
-        공연 날짜 <br/>
-        공연 장소 <br/>
-        가격 <br/>
-        링크 <br/> 
-        내용 
-        </p> 
+      
 
       </Content> 
       </div>
@@ -104,7 +103,7 @@ export default function Info() {
     </div>
       </Mold>
     </div>
-    )
+   } ))
   }
   
    
@@ -123,6 +122,22 @@ export default function Info() {
           공연정보 등록
         </Btn>
       </Link>
+      
+      <input value = {artist} 
+      style ={{border : "none" , borderRadius : "8px" ,
+      margin : "10px",
+      backgroundColor : "#fafaf0", 
+      boxShadow: "0 0 2px 3px rgba(0, 0, 0, 0.1)"
+    }}
+      onChange = {(e) => {setArtist(e.target.value)}} /> 
+      <AiFillCheckCircle  
+      style ={{ margin : "5px"}}
+      onClick = {() => {artistListchange()}}></AiFillCheckCircle>
+      {makeForm()}
+      {makeForm()}
+      {makeForm()}
+      {makeForm()}
+      {makeForm()}
     </>
   );
 }
@@ -155,20 +170,22 @@ box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.1);
 `;
 
 const Image = styled.div`
-background-color: orange;
-padding: 2px;
-width: 25px;
-height: 25px;
-display: flex;
-align-items: center;
-justify-content: center;
-border-radius: 50%;`;
+  background-color: orange;
+  padding: 2px;
+  width: 25px;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;`
+  ;
 
-const Image2 = styled.image`
+const Image2 = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 50%;
+  
 
 `
 
@@ -198,7 +215,7 @@ border-radius : 10px;
 `;
 
 const Content = styled.div`
- background-color : white;
+ background-color : #fafaf0;
  border-radius : 10px;
   margin : 8px;
  display : flex;

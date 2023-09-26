@@ -1,27 +1,41 @@
 import { keyframes, styled } from "styled-components";
 import Contents from "../layout/Contents";
 import Wrapper from "../layout/Wrapper";
-import { BsFillPencilFill } from "react-icons/bs";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom"; 
+import {getInfoPosts} from "../api/api2";
+// react-icons 모음 
 import {AiFillHeart} from "react-icons/ai";
 import {BsBookmarkStarFill} from "react-icons/bs";
+import { BsFillPencilFill } from "react-icons/bs";
+import {BsCalendarCheck} from "react-icons/bs";
+import {AiFillCheckCircle} from "react-icons/ai";
+
 
 const Home = () => {
   // 문제가 생긴다면 useEffect를 사용하자 
-  const [form , setForm] = useState([{title : "Super Shy" , artist : "뉴진스"
-   , genre : "concert" ,ticketdate : "2023/05/02" , date : "2022/09" , place : "대전 충남대학교",  url : "https://tickets.interpark.com/goods/23006666"},{title : "LoveDive" , artist : "아이즈원"
-   , genre : "concert" ,ticketdate : "2023/09/02" , date : "2023/08" , place : "대전 충남대학교",  url : "https://tickets.interpark.com/goods/23006666"},
-   {title : "Super Shy" , artist : "르세라핌"
-   , genre : "concert" ,ticketdate : "2023/05/02" , date : "2023/09" , place : "대전 충남대학교",  url : "https://tickets.interpark.com/goods/23006666"},
-   {title : "Super Shy" , artist : "방탄소년단"
-   , genre : "concert" ,ticketdate : "2023/09/02" , date : "2023/09" , place : "대전 충남대학교",  url : "https://tickets.interpark.com/goods/23006666"},
-   {title : "Super Shy" , artist : "뉴진스"
-   , genre : "concert" ,ticketdate : "2023/09/02" , date : "2023/08/05" , place : "대전 충남대학교",  url : "https://tickets.interpark.com/goods/23006666"}]);
   const [player , setPlayer] = useState ("");
   const [playerList , setPlayerList ] = useState([]);
   const [date , setDate] = useState("");
-  const [ticketdate , setTicketDate] = useState("")
+  const [ticketdate , setTicketDate] = useState("");
+  const [form , setForm] = useState();
+  const [checkdate , setCheckDate] = useState(false);
+  const [checkdate2 , setCheckDate2] = useState("")
+
+
+  const InfoPosts = async () => {
+    try {
+      const result = await getInfoPosts();
+      console.log(result);
+      setForm(result);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    InfoPosts();
+  }, []);
   
 
    const playerChange = (e) => {
@@ -45,6 +59,91 @@ const Home = () => {
 
     )
    }
+   // datefiltering
+   const datefiltering = (value) => {
+    const testy = form;
+    switch(value){
+      case "performance_date" : testy = datefilter1();
+      case "ticket_date" : testy =  datefilter2("a");
+      case "pre_ticketing" : testy = datefilter2("b");
+    }
+   return testy;
+  }
+  const datefilter1 = () => {
+    const test2 = form.filter(data => { const a = 0;
+      data.performance_date.filter((d , number) => {  (number%2 === 1) ? 
+       (( (d.slice(0,4) + d.slice(5,7)) === (date.slice(0,4) + date.slice(5,7))) ? a++ : a=0)  : console.log("datefilter성공");
+       return a;});
+       return a > 0;
+   })
+   return test2
+  }
+  const datefilter2 = (value) => {
+    const test2 = form;
+    if(value === "a"){
+       test2 = form.filter(form => {return ( (form.ticket_date.startedAt.slice(0,4) + form.ticket_date.startedAt.slice(5,7)) 
+        === (date.slice(0,4) + date.slice(5,7)) )})}
+   else{
+    test2 = form.filter(form => {return ( (form.ticket_date.startedAt.slice(0,4) + form.ticket_date.startedAt.slice(5,7)) 
+     === (date.slice(0,4) + date.slice(5,7)) )})}
+     return test2; 
+
+   }
+   
+   const cardRender = () => {
+    const test = form; 
+    const test2 = form;
+    if(date !== "") {
+      switch(checkdate2) {
+        case "선예매" : test = datefiltering("pre_ticketing");
+        case "티켓팅 날짜" : test = datefiltering("ticket_date");
+        case "공연 날짜" : test = datefiltering("preformance_date");
+      } 
+    test2 = test;
+    } 
+    if(playerList.length !== 0) {
+      test2 = playerList.map((data) => {return test.filter( datas => datas.artist.includes(data)  )} ).flat()
+    }
+    
+    return (test2.map( data => { return (
+      <L_col>
+        <Mold >
+        <div style = {{display : "flex"}}>
+      <AiFillHeart style ={{color : "orange" }}/> 
+      <a href = {data.link}><BsBookmarkStarFill style = {{color : "#bebebe"}} /></a>
+      </div> 
+      <Fonty style = {{wordBreak : "normal"}}>{data.title} </Fonty>
+      
+       <li style = {{fontSize : "12px" ,fontWeight : "bold" , margin : "0px 0px 0px 5px",
+          display : "flex"}}> {data.player.map((dataPlayer) => {
+        return( <div>{dataPlayer}</div>)
+       })} </li> 
+       
+       <div style = {{display : "flex" }}>
+       <P>장르</P>
+       <p style={{fontSize : "10pd"}}>{data.genre}</p>
+       <br/> 
+       <P>선예매날짜 / 시작 시간 </P>
+       <p> {data.pre_ticketing.startedAt} <br/>
+        {data.pre_ticketing.start_time} </p>
+       <br/>
+        <P> 티켓팅날짜 / 시작 시간 </P>
+       <p>
+        {data.ticket_date.startedAt} <br/> 
+        {data.ticket_date.start_time}  </p>
+       <br/>
+      <P>공연날짜 / 시간 </P>
+       {data.performance_date.map((dat => {return (<><p>{dat}</p><br/></>)  }))}
+       <br/> 
+      <P>공연 장소</P>
+      <p>{data.place}</p>
+
+       </div>
+      
+      </Mold>
+      </L_col>)}))
+  }
+
   
   const playerDelete = (v) => {
     setPlayerList( playerList.filter((data) => { return data !== v })) 
@@ -56,74 +155,42 @@ const Home = () => {
   }
  
 
-  const cardRender = () => {
-    
-    const test = (date !== "") ?  form.filter(form => {return (form.date.slice(0,4) + form.date.slice(5,7)) === (date.slice(0,4) + date.slice(5,7))
-       ||  (form.ticketdate.slice(0,4) + form.ticketdate.slice(5,7)) === (date.slice(0,4) + date.slice(5,7))})  : form;
-    const test2 = (playerList.length !== 0  ) ?  playerList.map((data) => {return test.filter( datas => datas.artist.includes(data)  )} ).flat() : test;
-    
-    
-    return (test2.map ( data => { return (
-      <L_col>
-        <Mold >
-
-        <div style = {{display : "flex"}}>
-      <AiFillHeart style ={{color : "orange" }}/> 
-      <a href = {data.url}><BsBookmarkStarFill style = {{color : "#bebebe"}} /></a>
-      </div> 
-      <Fonty style = {{wordBreak : "normal"}}>{data.title} </Fonty>
-      
-       <li style = {{fontSize : "12px" ,fontWeight : "bold" , margin : "0px 0px 0px 5px"}}> {data.artist} </li> 
-       
-       <div style = {{display : "flex" }}>
-       <p style = {{fontSize : "11px" ,margin: "0px 10px 0px 5px" , fontWeight : "bold" }}>
-        genre <br/>
-        ticketdate <br/>
-        date <br/> 
-        place 
-       </p>
-
-      <p style ={{fontSize : "10px" }}>
-        {data.genre}  <br/>
-       {data.ticketdate} <br/> 
-        {data.date} <br/> 
-       {data.place}
-      </p> 
-      </div> 
-      </Mold>
-      </L_col>)}))
-  }
   
   
 
 
   return (
-    
     <Wrapper>
-      <Contents>
-        <div>
-        <div style = {{display : "flex"}} > 
-        <input type = "month" 
-        style ={{ backgroundColor : "#f5f5dc" , border:"none" , borderRadius : "7px" , margin : "5px"}}
-        onChange = { (e) => {setallDate(e)} }/> 
-              <div style = {{display : "flex" , gap : "5px"}}>
-              <input 
-              value = {player}
-              style ={{ backgroundColor : "#f5f5dc" , border:"none" , borderRadius : "7px" , margin : "5px"}}
-              onChange = {(e) => {setPlayer(e.target.value)}} /> 
-              <button onClick = { playerChange} 
-              style = {{backgroundColor : "#f5f5dc" , border : "none" , borderRadius : "7px" ,margin : "5px"}}
-              >클릭!</button> 
-              {playerRender()}  
-              </div>  </div>
-          <L_row>
-             {cardRender()}
-          </L_row>
-        </div>
-      </Contents>
-    </Wrapper>
-  );
+    <Contents>
+      <div>
+      <div style = {{display : "flex"}} > 
+      {checkdate ? <select onClick = {() => {checkdate2(e.target.value)}}> <option>선예매</option> 
+      <option >티켓팅 날짜 </option>
+      <option> 공연 날짜 </option>
+      </select> 
+      : <BsCalendarCheck onClick = {setCheckDate(!checkdate)}/> }
+      <input type = "month" 
+      style ={{ backgroundColor : "#f5f5dc" , border:"none" , borderRadius : "7px" , margin : "5px"}}
+      onChange = { (e) => {setallDate(e)} }/> 
+            <div style = {{display : "flex" , gap : "5px"}}>
+            <input 
+            value = {player}
+            style ={{ backgroundColor : "#f5f5dc" , border:"none" , borderRadius : "7px" , margin : "5px"}}
+            onChange = {(e) => {setPlayer(e.target.value)}} /> 
+            <AiFillCheckCircle onClick = { playerChange} 
+            style = {{backgroundColor : "#f5f5dc" , border : "none" , borderRadius : "7px" ,margin : "5px"}}
+            />
+            {playerRender()}  
+            </div>  </div>
+        <L_row>
+          {cardRender()}
+        </L_row>
+      </div>
+    </Contents>
+  </Wrapper>
+);
 };
+ 
 
 
 
@@ -163,5 +230,12 @@ const Tag = styled.span`
   font-size: 12px;
   cursor: pointer;
 `;
+
+const P = styled.p`
+font-size : 11px;
+margin: 0px 10px 0px 5px;
+font-weight : bold;
+
+`
 
 export default Home;

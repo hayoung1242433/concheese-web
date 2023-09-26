@@ -5,7 +5,7 @@
   "main": "./src/index.jsx",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server --port 5501",
+    "start": "webpack-dev-server --port 0",
     "build": "webpack ."
   },
   "keywords": [],

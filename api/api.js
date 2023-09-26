@@ -40,8 +40,8 @@ export async function updatePost(id, formData) {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(formData),
-    credentials: "include",
+    body: JSON.stringify(formData)
+    
   });
 
   if (!response.ok) {
@@ -63,6 +63,4 @@ export async function deletePost(id) {
     throw new Error("error");
   }
 
-  const body = await response.json();
-  return body;
 }

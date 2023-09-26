@@ -33,10 +33,21 @@ const Nav = () => {
               style={{
                 display: "block",
                 padding: "10px 20px",
-                backgroundColor: "white",
-                border: "1px solid #f49c5d",
+                backgroundColor: "black",
+                border: "none",
+                color : "white",
+                borderRadius : "8px"
+                
               }}
               to={{ pathname: "/login" }}
+              onMouseEnter = {(e) => {
+                e.target.style.backgroundColor = "#f49c5d";
+               
+              }}
+              onMouseLeave = {(e) =>{
+                e.target.style.backgroundColor = "black";
+              
+              }}
             >
               로그인
             </Link>
@@ -48,7 +59,7 @@ const Nav = () => {
 };
 
 const Navbar = styled.nav`
-  border-bottom: 1px solid #eee;
+  background-color : white;
 `;
 
 const NavList = styled.ul`
@@ -66,11 +77,11 @@ const NavContents = styled.div`
 `;
 
 const NavItem = styled.li`
-  &:hover {
-    color: #f49c5d;
+  color : ${(props) => (props.p === "true" ? "#f49c5d" : "black")};
+  &:hover { border-top: 3px solid #f49c5d;
   }
 
-  border-top: 3px solid ${(props) => (props.p === "true" ? "#f49c5d" : "white")};
+  
 `;
 // border: 1px solid #f49c5d;
 
