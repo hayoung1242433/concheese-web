@@ -13,6 +13,7 @@ export async function getFreePosts() {
 }
 
 export async function writeFreePost(formData) {
+  console.log(formData);
   const response = await fetch(
     "http://swacademy.null0xff.com:8080/api/v1/community/post",
     {

@@ -1,7 +1,7 @@
-const EndPoint = "http://swacademy.null0xff.com:8080/api/v1/concert/info";
+
 export async function getInfoPosts() {
     const response = await fetch(
-     EndPoint + "List"
+      "http://swacademy.null0xff.com:8080/api/v1/concert/infoList"
     );
   
     if (!response.ok) {
@@ -14,8 +14,9 @@ export async function getInfoPosts() {
   }
   
   export async function writeInfoPost(formData) {
+    console.log(formData);
     const response = await fetch(
-      EndPoint,
+      "http://swacademy.null0xff.com:8080/api/v1/concert/echo",
       {
         method: "POST",
         headers: {
@@ -35,7 +36,7 @@ export async function getInfoPosts() {
   }
   
   export async function updateInfoPost(id, formData) {
-    const url = EndPoint + `/${id}`;
+    const url = `http://swacademy.null0xff.com:8080/api/v1/concert/info/${id}`;
     const response = await fetch(url, {
       method: "PUT",
       headers: {
@@ -55,7 +56,7 @@ export async function getInfoPosts() {
   
   export async function deleteInfoPost(id) {
     const response = await fetch(
-      EndPoint + `/${id}`,
+      EndPoint + `http://swacademy.null0xff.com:8080/api/v1/concert/info/${id}`,
       {
         method: "DELETE",
       }

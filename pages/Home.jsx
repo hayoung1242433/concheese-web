@@ -7,7 +7,6 @@ import {getInfoPosts} from "../api/api2";
 // react-icons 모음 
 import {AiFillHeart} from "react-icons/ai";
 import {BsBookmarkStarFill} from "react-icons/bs";
-import { BsFillPencilFill } from "react-icons/bs";
 import {BsCalendarCheck} from "react-icons/bs";
 import {AiFillCheckCircle} from "react-icons/ai";
 
@@ -17,12 +16,31 @@ const Home = () => {
   const [player , setPlayer] = useState ("");
   const [playerList , setPlayerList ] = useState([]);
   const [date , setDate] = useState("");
-  const [ticketdate , setTicketDate] = useState("");
-  const [form , setForm] = useState();
+  const [datefilter , setDateFilter] = useState("");
   const [checkdate , setCheckDate] = useState(false);
-  const [checkdate2 , setCheckDate2] = useState("")
+  const [form , setForm] = useState([{title :"뉴진스 투어" 
+  , genre : "concert" , 
+   player : "ddd" ,
+    location : "1230/1112/3145" ,
+     preTicketing : {startedAt : "2023-09-03" , start_time : "09:00:00"} ,  
+     ticketing : {startedAt : "2023-09-04" , start_time : "10:00:00"} ,
+     concertDate : {startedAt : "2023-09-05" ,  start_time : "09:00:00"},
+     description : "helloqworld" ,
+     link : "naver.com"
+    } ,{title :"방탄 투어" 
+    , genre : "concert" , 
+     player : "ddd" ,
+      location : "1230/1112/3145" ,
+       preTicketing : {startedAt : "2023-09-06" , start_time : "09:00:00"} ,  
+       ticketing : {startedAt : "2023-09-07" , start_time : "10:00:00"} ,
+       concertDate : {startedAt : "2023-08-08" ,  start_time : "09:00:00"},
+       description : "helloqworld" ,
+       link : "naver.com"
+      } ]);
+ 
+  
 
-
+  /*
   const InfoPosts = async () => {
     try {
       const result = await getInfoPosts();
@@ -32,17 +50,40 @@ const Home = () => {
       console.error(err);
     }
   };
+  const playercross = async () =>{
+  
+  } */  
 
   useEffect(() => {
-    InfoPosts();
+    makeCross(); 
+
   }, []);
+
+  const makeCross = () => {
+    
+    const c = form.map((data) => { 
+      const locationArray = spliting(data.location);
+      return { ...data , location :locationArray} })
+    console.log(c);
+    setForm(c);
+  
+  
+  }
+  
+  const spliting = (value) => {
+    const a = value;
+   const b = a.split("/");
+   return b
+  }
+
   
 
    const playerChange = (e) => {
     e.preventDefault();
     const playerlist = playerList.filter((data) => { return data !== player }) 
-    console.log(playerlist);
+   
     setPlayerList([...playerlist , player])
+    console.log(playerlist);
     setPlayer("");   
    }
 
@@ -59,99 +100,90 @@ const Home = () => {
 
     )
    }
-   // datefiltering
-   const datefiltering = (value) => {
-    const testy = form;
-    switch(value){
-      case "performance_date" : testy = datefilter1();
-      case "ticket_date" : testy =  datefilter2("a");
-      case "pre_ticketing" : testy = datefilter2("b");
-    }
-   return testy;
-  }
-  const datefilter1 = () => {
-    const test2 = form.filter(data => { const a = 0;
-      data.performance_date.filter((d , number) => {  (number%2 === 1) ? 
-       (( (d.slice(0,4) + d.slice(5,7)) === (date.slice(0,4) + date.slice(5,7))) ? a++ : a=0)  : console.log("datefilter성공");
-       return a;});
-       return a > 0;
-   })
-   return test2
-  }
-  const datefilter2 = (value) => {
-    const test2 = form;
-    if(value === "a"){
-       test2 = form.filter(form => {return ( (form.ticket_date.startedAt.slice(0,4) + form.ticket_date.startedAt.slice(5,7)) 
-        === (date.slice(0,4) + date.slice(5,7)) )})}
-   else{
-    test2 = form.filter(form => {return ( (form.ticket_date.startedAt.slice(0,4) + form.ticket_date.startedAt.slice(5,7)) 
-     === (date.slice(0,4) + date.slice(5,7)) )})}
-     return test2; 
-
-   }
+   // 필터링 
+  
+ 
+ 
+  
+   
    
    const cardRender = () => {
-    const test = form; 
-    const test2 = form;
-    if(date !== "") {
-      switch(checkdate2) {
-        case "선예매" : test = datefiltering("pre_ticketing");
-        case "티켓팅 날짜" : test = datefiltering("ticket_date");
-        case "공연 날짜" : test = datefiltering("preformance_date");
-      } 
-    test2 = test;
-    } 
-    if(playerList.length !== 0) {
-      test2 = playerList.map((data) => {return test.filter( datas => datas.artist.includes(data)  )} ).flat()
+    let test = form;
+    if (datefilter.length !== 0 && date.length !== 0 ){
+      const checking = datefilter.slice(0,4) + datefilter.slice(5,7);
+      switch(date) {
+        case "선예매" : test = form.filter((data) => { return (data.preTicketing.startedAt.slice(0,4) + data.preTicketing.startedAt.slice(5,7)) === checking} ) ; break;
+        case "티켓팅 날짜" : test = form.filter((data) => { return (data.ticketing.startedAt.slice(0,4) + data.ticketing.startedAt.slice(5,7)) === checking} ) ; break;
+        case "공연 날짜" : test = form.filter((data) => { return (data.concertDate.startedAt.slice(0,4) + data.concertDate.startedAt.slice(5,7)) === checking} ) ; break;
     }
     
-    return (test2.map( data => { return (
-      <L_col>
+     } 
+    let test2 = test;
+    console.log(playerList);
+    console.log(test2);
+     if(playerList.length !== 0) {
+      test2 = playerList.map((data) => {return test.filter( datas => datas.player.includes(data)  )} ).flat()
+    }
+
+    
+
+    return(
+     test2.map((data) => {
+      return (<L_col>
         <Mold >
         <div style = {{display : "flex"}}>
       <AiFillHeart style ={{color : "orange" }}/> 
       <a href = {data.link}><BsBookmarkStarFill style = {{color : "#bebebe"}} /></a>
       </div> 
-      <Fonty style = {{wordBreak : "normal"}}>{data.title} </Fonty>
+      <Fonty style = {{wordBreak : "normal" }}>{data.title} </Fonty>
       
-       <li style = {{fontSize : "12px" ,fontWeight : "bold" , margin : "0px 0px 0px 5px",
-          display : "flex"}}> {data.player.map((dataPlayer) => {
-        return( <div>{dataPlayer}</div>)
-       })} </li> 
-       
-       <div style = {{display : "flex" }}>
+       <li style = {{fontSize : "15px" ,fontWeight : "bold" , margin : "0px 4px 15px 5px",
+          display : "flex" }}> {data.player }  </li> 
+       <div>
+       <p style = {{display : "flex" , gap : "55px" , margin : " 5px 2px 5px"}}>
        <P>장르</P>
-       <p style={{fontSize : "10pd"}}>{data.genre}</p>
-       <br/> 
-       <P>선예매날짜 / 시작 시간 </P>
-       <p> {data.pre_ticketing.startedAt} <br/>
-        {data.pre_ticketing.start_time} </p>
-       <br/>
-        <P> 티켓팅날짜 / 시작 시간 </P>
-       <p>
-        {data.ticket_date.startedAt} <br/> 
-        {data.ticket_date.start_time}  </p>
-       <br/>
-      <P>공연날짜 / 시간 </P>
-       {data.performance_date.map((dat => {return (<><p>{dat}</p><br/></>)  }))}
-       <br/> 
-      <P>공연 장소</P>
-      <p>{data.place}</p>
+       <p style={{fontSize : "12px"}}>{data.genre}</p> </p>
 
+       <p style = {{display : "flex" , gap : "20px" , margin : "5px 2px 5px "}}>
+       <P>선예매날짜 </P>
+       <p style ={{fontSize : "12px"}}> {data.preTicketing.startedAt}</p> </p>
+      
+      <p style = {{display : "flex" , gap : "20px" , margin : "5px 2px 5px"}}>
+        <P> 티켓팅날짜</P>
+       <p style ={{fontSize : "12px"}}>
+        {data.ticketing.startedAt}</p> </p> 
+      
+      <p style = {{display : "flex" , gap : "31px" ,margin : "5px 2px 5px "}}>
+      <P>공연날짜 </P>
+      <p style = {{fontSize : "12px"}}>
+      {data.concertDate.startedAt} </p> </p> 
+    
+      <p style = {{display : "flex" , gap : "31px" ,margin : "5px 2px 5px "}}>
+      <P >공연 장소</P>
+     <p style ={{fontSize : "12px"}}>{data.location}</p> </p>
+  
        </div>
       
       </Mold>
-      </L_col>)}))
-  }
+      </L_col>)})
+     )
+      }
+
 
   
   const playerDelete = (v) => {
     setPlayerList( playerList.filter((data) => { return data !== v })) 
   }
    
-  const setallDate =(e) => {
-    setDate(e.target.value);
-    setTicketDate(e.target.value);
+  const setallDate =() => {
+   return(
+    <div style = {{display : "flex" }} ><select style = {{backgroundColor : "#f5f5dc" , border:"none" , borderRadius : "7px" , margin : "5px"}} onChange = {(e) => {setDate(e.target.value)}}> <option >선택해주세요 </option> <option>선예매</option> 
+    <option >티켓팅 날짜 </option>
+    <option> 공연 날짜 </option>
+    </select> 
+    <input type = "month" style = {{backgroundColor : "#f5f5dc" , border : "none" , borderRadius : "7px" , margin : "5px"}} onChange={(e) => {setDateFilter(e.target.value)}}></input> </div>
+
+   )
   }
  
 
@@ -162,28 +194,27 @@ const Home = () => {
   return (
     <Wrapper>
     <Contents>
-      <div>
-      <div style = {{display : "flex"}} > 
-      {checkdate ? <select onClick = {() => {checkdate2(e.target.value)}}> <option>선예매</option> 
-      <option >티켓팅 날짜 </option>
-      <option> 공연 날짜 </option>
-      </select> 
-      : <BsCalendarCheck onClick = {setCheckDate(!checkdate)}/> }
-      <input type = "month" 
-      style ={{ backgroundColor : "#f5f5dc" , border:"none" , borderRadius : "7px" , margin : "5px"}}
-      onChange = { (e) => {setallDate(e)} }/> 
+      <div > 
+      <div style ={{display : "flex" , gap : "5px"}}>
+      {(checkdate === true ) ? setallDate()
+      : <BsCalendarCheck onClick = {() => {const check2= checkdate ; setCheckDate(!check2)}}/> }
             <div style = {{display : "flex" , gap : "5px"}}>
             <input 
             value = {player}
             style ={{ backgroundColor : "#f5f5dc" , border:"none" , borderRadius : "7px" , margin : "5px"}}
             onChange = {(e) => {setPlayer(e.target.value)}} /> 
+  </div> 
             <AiFillCheckCircle onClick = { playerChange} 
             style = {{backgroundColor : "#f5f5dc" , border : "none" , borderRadius : "7px" ,margin : "5px"}}
             />
             {playerRender()}  
-            </div>  </div>
+            </div> 
+            <div> 
+
+            
+             </div>
         <L_row>
-          {cardRender()}
+        {cardRender()}
         </L_row>
       </div>
     </Contents>
@@ -206,7 +237,7 @@ const L_col = styled.li`
   padding: 0 5px;
 `;
 const Mold = styled.div`
-height : 300px;
+height : 340px;
 background-color : #f5f5dc;
 border-radius : 10px;
 overflow : hidden;
@@ -233,9 +264,11 @@ const Tag = styled.span`
 
 const P = styled.p`
 font-size : 11px;
-margin: 0px 10px 0px 5px;
 font-weight : bold;
 
 `
+
+
+
 
 export default Home;

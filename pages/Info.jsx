@@ -6,22 +6,29 @@ import {RiAlarmWarningLine} from "react-icons/ri";
 import {useState} from 'react';
 import {AiFillCheckCircle} from "react-icons/ai"
 import Profile from "../assets/profile.jpg"
-import {deleteInfoPost , getInfoPosts} from "../api/api2"
+import { getInfoPosts} from "../api/api2"
 export default function Info() {
-  const [alarm , setAlarm ] = useState(0);
   const [artist, setArtist] = useState("");
   const [artistList , setArtistList] = useState([]);
   const [form , setForm] = useState();
+   
+  // 값을 받기 
+  /*
+  useEffect( () => {
+    getPosts(); 
+   } , []);
+  const getPosts = async () => {
+    try{
+      const result = await getInfoPosts();
+      setForm(result)
+    }
+    catch(err){
+      console.log(err);
+    }
+  }*/
 
-   const checkAlarm = (value) => {
-    setAlarm ((pre) => {return pre +=1;})
-    (alarm > 10 ) ? console.log("삭제 예정") : deletePosts(value);
-    
-   }
-   const deletePosts = () => {
-    try{ deleteInfoPost(id)}
-    catch(err) {console.err(err)}
-   }
+
+  
   
    const artistListchange = () => {
     if(artist.length > 0){
@@ -83,7 +90,7 @@ export default function Info() {
         장르 <br/>
         concert<br/> 
         선예매 날짜 / 시간 <br/>
-        {}<br/> 
+        {form.genre} / {form.time}<br/> 
         티켓팅 날짜 <br/> 
         2023-09-04<br/> 
         공연 날짜 <br/>
@@ -133,10 +140,6 @@ export default function Info() {
       <AiFillCheckCircle  
       style ={{ margin : "5px"}}
       onClick = {() => {artistListchange()}}></AiFillCheckCircle>
-      {makeForm()}
-      {makeForm()}
-      {makeForm()}
-      {makeForm()}
       {makeForm()}
     </>
   );

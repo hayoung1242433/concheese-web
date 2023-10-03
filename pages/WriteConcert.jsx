@@ -4,11 +4,10 @@ import Wrapper from "../layout/Wrapper";
 import { styled } from "styled-components";
 import { BsFillPlusCircleFill } from "react-icons/bs";
 import { AiOutlineMinusSquare } from "react-icons/ai";
-import {useEffect} from "react";
 import {writeInfoPost} from "../api/api2"
 
 
-const genretal = ["idol" , "concert", "idol2" , "idol3d" ] 
+const genretal = ["선택해주세요" ,"뮤지컬", "콘서트" , "연극" , "인디공연"] 
 
 const WriteConcert = () => {
   // form 배치 순
@@ -21,13 +20,15 @@ const WriteConcert = () => {
   const [player, setPlayer] = useState("");
   const [playerList, setPlayerList] = useState([]);
   // 날짜 
+  /*
   const [preticketing , setPreDateList] = useState("");
   const [preticketing2, setPreDate2List] = useState("");
   const [ticketdate , setTicketDate] = useState("");
   const [ticketdate2, setTicket2Date] = useState("")
   const [dateTime , setDateTimeList] = useState("");
   const [dateRightTime , setDateRightTime] = useState("");
-  const [timeList , setTimeList] = useState([])
+  */
+  const [dates, setDate] = useState(["","","","","","","","",""]);
   const [click , setClick] = useState( false);
   // 장소
   const [placeList, setPlaceList] = useState([]);
@@ -35,8 +36,7 @@ const WriteConcert = () => {
   const [content, setContent] = useState("");
   // 링크 
   const [link, setLink] = useState("");
-  // 제출 
-  const [final , setFinal] = useState(false);
+
   
   
 
@@ -51,90 +51,75 @@ const WriteConcert = () => {
       case "check" : setClick(!click); break; // 선예매 유무에 따라 날짜/ 시간 다르게 나타나게 
       case "link"   : setLink(event.target.value); break;
       case "content" : setContent(event.target.value); break; 
-      case "predate1" : setPreDateList(event.target.value); break;
-      case "predate2" : setPreDate2List(event.target.value); break;
-      case "ticketdate1" : setTicketDate(event.target.value); break;
-      case "ticketdate2" : setTicket2Date(event.target.value); break;
     
     }
   }
+  const handleDate = (event) => {
+    const date = dates.map((d , index) => {return ( (index === parseInt(event.target.id)) ?  d = event.target.value : d )})
+    setDate(date);
+    console.log(date);
+
+  }
   //제출  
   const setReturn = () =>  {
-    const timelista = timeList.flat();
+    // 후처리
+    const dates2 = dates.map((date) => {return (date === "") ? date = "정보없음 " : date }  )
+    let [a , b ,c ,d , e, f ,g , h , i ] = dates2;
+    console.log(dates2);
+    const playerString = (playerList.length > 0 ) ? playerList.reduce( (accmulater , currentdata) => {return accmulater += "/" + currentdata}) : playerList;
+    const placeString = (placeList.length > 0 ) ? placeList.reduce( (accmulater , currentdata) => {return accmulater += "/" + currentdata}) : placeList;
+    let [playerString2] = [playerString]
+    let [placeString2] = [placeString]
+    console.log(playerString2);
     const form = {
       title : title , 
-      player : playerList , 
+      artist : playerString2 , 
       genre : selectedGenre, 
-      place : placeList,
-      pre_tickting :{
-        startedAt : preticketing,
-        start_time : preticketing2,
+      location : placeString2,
+      preTicketing :{
+        startedAt : a, 
+        startTime : c,
+        type : "PRE_SALE"
       },
-      ticket_date:{
-        startedAt : ticketdate,
-        start_time : ticketdate2,
+      ticketing :{
+        startedAt : d,
+        startTime : f ,
+        type : "GENERAL_SALE"
        
       },
-      performance_date : timelista
+      concertDate : {
+        startedAt : g,
+        start_time : i
+      }
       ,
-      content : content,
+      description : content,
       link : link
     }
 
-   console.log(form);
+   //비동기 문제가 있음으로 그냥 setForm을 이용해서 form을 넣지 않는다. 
    getPosts(form);
+   // 다시 시작 
 
   }
   
 
   const getPosts = async (form) =>{
-    if(form.length === 0){
+    
+    if(form.length === 0 ){
       alert("입력해주세요");
       console.log(form)
     }
     else{
     try{
-    writeInfoPost(form);
+     await writeInfoPost(form);
     } 
     catch (err) {
-      console.err(err);
+      console.error(err);
     }
     } 
 
   }
 
-
-
-  // 날짜
-  const rightDate = () =>{
-    if(dateRightTime.length !== 0 && dateTime.length !== 0){
-    setTimeList((prev) => {return [...prev , [dateTime,  dateRightTime] ]}) 
-    setDateTimeList("");
-    setDateRightTime("");
-  }
-    else {
-      alert("날짜와 해당 날짜의 시간을 둘 다 입력해 주세요 ")
-    }
-  }
- // 날짜2 삭제
- const deleteTime2 = (e) => {
-   const v = e.target.value;
-   console.log(v);
-  
-   const a = timeList.filter((times) => {
-      return (times[0] === v)
-   })
-   setTimeList(a);
- }
- // 날짜 render 
- const dateRender = () =>{
-  return( timeList.map((times) => times.reduce((time , currentTime) => 
-    {return <Tag style ={{margin : "8px"}}
-    value = {time}
-    onClick = {deleteTime2}
-    > 
-    {time} / {currentTime} x </Tag>} ) ))
- }
  
 
   // 장소 
@@ -142,7 +127,8 @@ const WriteConcert = () => {
     new daum.Postcode({
       oncomplete: function (data) {
         // 날짜당
-        setPlaceList([...placeList, data.roadAddress]);
+        const code = parseInt(data.zonecode)
+        setPlaceList([...placeList, code]);
       },
     }).open();
   };
@@ -168,10 +154,14 @@ const WriteConcert = () => {
       .filter((v) => {
         return v.length > 0;
       })
-      .map((data) => {
-        return <Tag>{data}</Tag>;
+      .map((data) => { 
+        return <Tag onClick = {() => {playerDelete(data)}}>{data} x </Tag>;
       }))   }
-  // 
+  
+  const playerDelete = (value) =>{
+      const playerlist = playerList.filter((player) => { return player !== value })
+      setPlayerList(playerlist);
+  }
   
 
   const popup = () => {
@@ -180,8 +170,9 @@ const WriteConcert = () => {
       {click === true && <div style={{ margin : `10px 0 20px 0` , fontSize : '10px' }}>
             <label htmlFor="ticketDate">선예매 날짜</label> / <label htmlFor="time">선예매 시간</label>
             <br/>
-            <Date  id = "predate1" type = "date" onChange = {handleChange} /> 
-            <Date id = "predate2" type = "time" style = {{ margin : "10px"}} onChange = {handleChange} /> 
+            <Date  id = "0" type = "date" onChange = {handleDate} /> 
+            <Date  id = "1" type = "date" style = {{ margin : "10px"}} onChange ={handleDate} />  <br/> 
+            <Date id = "2" type = "time" onChange = {handleDate} /> 
           </div> }
        </>    
           )
@@ -253,18 +244,17 @@ const WriteConcert = () => {
           <div style={{ margin: "10px 0 20px 0" }}>
             <label htmlFor="ticketDate" style = {{fontSize : "10px" }}>티켓팅 날짜 / 시작 시간 </label>
              <br/> 
-             <Date id = "ticketdate1" type ="date" onChange = {handleChange} style ={{margin : "10px"}} /> 
-             <Date id = "ticketdate2" type ="time" onChange = {handleChange} /> 
+             <Date id = "3" type ="date" onChange = {handleDate} style ={{margin : "5px"}} />  ~ 
+             <Date id = "4" type = "date" onChange ={handleDate} />  <br/> 
+             <Date id = "5" type ="time" onChange = {handleDate} style ={{margin : "5px"}} /> 
           </div>
 
           <div style={{ margin: "10px 0 20px 0" }}>
             <label htmlFor="ticketDate" style = {{fontSize : "10px" }}> 공연 날짜 / 시작 시간 </label>
              <br/> 
-             <Date id ="a" type ="date" onChange = {(e) => { setDateTimeList(e.target.value)}} /> 
-             <Date id = "b" type ="time" style ={{margin : "10px"}} onChange = {(e) => setDateRightTime(e.target.value)} /> 
-             <BsFillPlusCircleFill  style = {{color : "orange" }} onClick = {() => {rightDate()}} /> 
-             <br/>
-             {dateRender()}
+             <Date id ="6" type ="date" style = {{margin : "5px"}} onChange = {handleDate} />  ~
+             <Date id = "7" type ="date" style ={{margin : "5px"}} onChange = {handleDate} />  <br/> 
+             <Date id = "8" type = "time" onChange = {handleDate} /> 
              
           </div>
            <div> 
@@ -347,3 +337,39 @@ const Date = styled.input`
 `;
 
 export default WriteConcert;
+
+
+ // 날짜 렌더(중간발표 이후 )
+  /*
+
+  // 날짜
+  const rightDate = () =>{
+    if(dateRightTime.length !== 0 && dateTime.length !== 0){
+    setTimeList((prev) => {return [...prev , [dateTime,  dateRightTime] ]}) 
+    setDateTimeList("");
+    setDateRightTime("");
+  }
+    else {
+      alert("날짜와 해당 날짜의 시간을 둘 다 입력해 주세요 ")
+    }
+  }
+ // 날짜2 삭제
+ const deleteTime2 = (e) => {
+   const v = e.target.value;
+   console.log(v);
+  
+   const a = timeList.filter((times) => {
+      return (times[0] === v)
+   })
+   setTimeList(a);
+ }
+ // 날짜 render 
+ const dateRender = () =>{
+  return( timeList.map((times) => times.reduce((time , currentTime) => 
+    {return <Tag style ={{margin : "8px"}}
+    value = {time}
+    onClick = {deleteTime2}
+    > 
+    {time} / {currentTime} x </Tag>} ) ))
+ } */ 
+ 
