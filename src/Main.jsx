@@ -7,7 +7,9 @@ import Free from "../pages/Free";
 import Info from "../pages/Info";
 import Login from "../pages/Login";
 
+
 const Main = () => {
+
   return (
     <BrowserRouter>
       <App>

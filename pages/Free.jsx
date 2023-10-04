@@ -4,9 +4,12 @@ import { getFreePosts, writeFreePost } from "../api/api";
 import { useState, useEffect } from "react";
 import FreeCard from "../components/FreeCard";
 
+
 export default function Free() {
   const [posts, setPosts] = useState([]);
   const [content, setContent] = useState();
+  const [artist, setArtist] = useState();
+  
 
   const getPosts = async () => {
     try {
@@ -22,7 +25,7 @@ export default function Free() {
   }, []);
 
   const addPost = () => {
-    if (!content) {
+    if (!content || !artist) {
       alert("내용을 입력해주세요");
       return;
     }
@@ -30,27 +33,31 @@ export default function Free() {
       writeFreePost({
         category: "FREE",
         content: content,
-        title: "Taejin Kim",
+        title: artist,
       });
     } catch (err) {
       console.err(err);
     }
     setContent("");
+    setArtist("");
     getPosts();
   };
 
+
   return (
-    <div>
+
+   
+       <div> 
       <Editor>
         <EditorTitle style={{}}>자유주제</EditorTitle>
         <div>
           <label htmlFor="name">닉네임</label>
           <Input
             style={{ padding: "10px", fontWeight: "bold", color: "#aaa" }}
-            disabled
             type="text"
-            value="Taejin Kim"
+            value={artist}
             id="name"
+            onChange = {(e) => {setArtist(e.target.value)}}
           />
           <label style={{ marginTop: "10px", display: "block" }}>내용</label>
           <Textarea
@@ -72,7 +79,8 @@ export default function Free() {
           </Box>
         );
       })}
-    </div>
+      </div>
+    
   );
 }
 

@@ -13,6 +13,7 @@ export async function getFreePosts() {
 }
 
 export async function writeFreePost(formData) {
+  console.log(formData);
   const response = await fetch(
     "http://swacademy.null0xff.com:8080/api/v1/community/post",
     {
@@ -40,8 +41,8 @@ export async function updatePost(id, formData) {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(formData),
-    credentials: "include",
+    body: JSON.stringify(formData)
+    
   });
 
   if (!response.ok) {
@@ -63,6 +64,4 @@ export async function deletePost(id) {
     throw new Error("error");
   }
 
-  const body = await response.json();
-  return body;
 }

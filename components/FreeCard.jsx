@@ -1,17 +1,23 @@
-import profile from "../assets/profile2.jpg";
+// import profile from "../assets/profile2.jpg";
 import { RiThumbUpFill } from "react-icons/ri";
 import { IoChatbubbleEllipsesSharp } from "react-icons/io5";
 import { useEffect, useState } from "react";
 import { HiDotsVertical } from "react-icons/hi";
 import styled from "styled-components";
 import { deletePost, updatePost } from "../api/api";
+import profile from "../assets/profile.jpg";
+import { useNavigate } from "react-router-dom";
 
 export default function FreeCard({ id, date, content, username }) {
+  const navigator = useNavigate();
   // update,delete할 때 id필요
   // const [createdAt, setCreatedAt] = useState(date);
   const [canEdit, setCanEdit] = useState(false);
   const [canUpdate, setCanUpdate] = useState(false);
   const [newContent, setNewContent] = useState(content);
+  const [commentTrue , setComment] = useState(false);
+  
+  // 옆 창에 보내기 연습 
 
   // const getDate = () => {
   //   let result;
@@ -28,6 +34,8 @@ export default function FreeCard({ id, date, content, username }) {
     } catch (err) {
       console.error(err);
     }
+
+    navigator(0);
   };
 
   const updateHandler = (id) => {
@@ -121,6 +129,8 @@ export default function FreeCard({ id, date, content, username }) {
           borderTop: "1px solid #eee",
         }}
       >
+    
+         
         <IconWrap>
           <RiThumbUpFill />
           좋아요
@@ -128,7 +138,8 @@ export default function FreeCard({ id, date, content, username }) {
         <IconWrap>
           <IoChatbubbleEllipsesSharp />
           댓글달기
-        </IconWrap>
+        </IconWrap> 
+        
       </div>
     </>
   );
