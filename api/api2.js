@@ -15,8 +15,10 @@ export async function getInfoPosts() {
   
   export async function writeInfoPost(formData) {
     console.log(formData);
+    
+    
     const response = await fetch(
-      "http://swacademy.null0xff.com:8080/api/v1/concert/echo",
+      "http://swacademy.null0xff.com:8080/api/v1/concert/info",
       {
         method: "POST",
         headers: {

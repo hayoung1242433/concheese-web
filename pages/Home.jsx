@@ -9,6 +9,7 @@ import {AiFillHeart} from "react-icons/ai";
 import {BsBookmarkStarFill} from "react-icons/bs";
 import {BsCalendarCheck} from "react-icons/bs";
 import {AiFillCheckCircle} from "react-icons/ai";
+import Profile3 from "../assets/profile7.jpg";
 
 
 const Home = () => {
@@ -20,27 +21,144 @@ const Home = () => {
   const [checkdate , setCheckDate] = useState(false);
   const [form , setForm] = useState([{title :"뉴진스 투어" 
   , genre : "concert" , 
-   player : "ddd" ,
+   player : "뉴진스" ,
     location : "1230/1112/3145" ,
      preTicketing : {startedAt : "2023-09-03" , start_time : "09:00:00"} ,  
      ticketing : {startedAt : "2023-09-04" , start_time : "10:00:00"} ,
      concertDate : {startedAt : "2023-09-05" ,  start_time : "09:00:00"},
-     description : "helloqworld" ,
+     description : "hellonewjeans" ,
      link : "naver.com"
-    } ,{title :"방탄 투어" 
+    } ,{title :"르세라핌 투어" 
     , genre : "concert" , 
-     player : "ddd" ,
+     player : "르세라핌" ,
       location : "1230/1112/3145" ,
        preTicketing : {startedAt : "2023-09-06" , start_time : "09:00:00"} ,  
        ticketing : {startedAt : "2023-09-07" , start_time : "10:00:00"} ,
        concertDate : {startedAt : "2023-08-08" ,  start_time : "09:00:00"},
-       description : "helloqworld" ,
+       description : "helloresserapim" ,
        link : "naver.com"
-      } ]);
+      } , {title :"방탄 투어" 
+      , genre : "concert" , 
+       player : "방탄소년단" ,
+        location : "1230/1112/3145" ,
+         preTicketing : {startedAt : "2023-09-06" , start_time : "09:00:00"} ,  
+         ticketing : {startedAt : "2023-09-07" , start_time : "10:00:00"} ,
+         concertDate : {startedAt : "2023-08-08" ,  start_time : "09:00:00"},
+         description : "hellobts" ,
+         link : "naver.com"
+        } , {title :"세븐틴 투어" 
+        , genre : "concert" , 
+         player : "세븐틴" ,
+          location : "1230/1112/3145" ,
+           preTicketing : {startedAt : "2023-10-06" , start_time : "09:00:00"} ,  
+           ticketing : {startedAt : "2023-11-07" , start_time : "10:00:00"} ,
+           concertDate : {startedAt : "2023-08-08" ,  start_time : "09:00:00"},
+           description : "helloseventeen" ,
+           link : "naver.com"
+          } , {title :"여자친구 투어" 
+          , genre : "concert" , 
+           player : "여자친구" ,
+            location : "1230/1112/3145" ,
+             preTicketing : {startedAt : "2023-10-06" , start_time : "09:00:00"} ,  
+             ticketing : {startedAt : "2023-11-07" , start_time : "10:00:00"} ,
+             concertDate : {startedAt : "2023-08-08" ,  start_time : "09:00:00"},
+             description : "helloqworld" ,
+             link : "naver.com"
+            } , {title :"뉴진스 투어" 
+            , genre : "concert" , 
+             player : "뉴진스" ,
+              location : "1230/1112/3145" ,
+               preTicketing : {startedAt : "2023-09-03" , start_time : "09:00:00"} ,  
+               ticketing : {startedAt : "2023-10-04" , start_time : "10:00:00"} ,
+               concertDate : {startedAt : "2023-09-05" ,  start_time : "09:00:00"},
+               description : "helloqworld" ,
+               link : "naver.com"
+              } ,{title :"방탄 투어" 
+              , genre : "concert" , 
+               player : "방탄소년단" ,
+                location : "1230/1112/3145" ,
+                 preTicketing : {startedAt : "2023-09-06" , start_time : "09:00:00"} ,  
+                 ticketing : {startedAt : "2023-11-07" , start_time : "10:00:00"} ,
+                 concertDate : {startedAt : "2023-08-08" ,  start_time : "09:00:00"},
+                 description : "helloqworld" ,
+                 link : "naver.com"
+                } , {title :"방탄 투어" 
+                , genre : "concert" , 
+                 player : "방탄소년단" ,
+                  location : "1230/1112/3145" ,
+                   preTicketing : {startedAt : "2023-10-06" , start_time : "09:00:00"} ,  
+                   ticketing : {startedAt : "2023-11-07" , start_time : "10:00:00"} ,
+                   concertDate : {startedAt : "2023-08-08" ,  start_time : "09:00:00"},
+                   description : "helloqworld" ,
+                   link : "naver.com"
+                  } , {title :"르세라핌 투어" 
+                  , genre : "concert" , 
+                   player : "르세라핌" ,
+                    location : "1230/1112/3145" ,
+                     preTicketing : {startedAt : "2023-11-06" , start_time : "09:00:00"} ,  
+                     ticketing : {startedAt : "2023-10-07" , start_time : "10:00:00"} ,
+                     concertDate : {startedAt : "2023-08-08" ,  start_time : "09:00:00"},
+                     description : "helloqworld" ,
+                     link : "naver.com"
+                    } , {title :"방탄 투어" 
+                    , genre : "concert" , 
+                     player : "방탄소년단" ,
+                      location : "1230/1112/3145" ,
+                       preTicketing : {startedAt : "2023-10-06" , start_time : "09:00:00"} ,  
+                       ticketing : {startedAt : "2023-09-07" , start_time : "10:00:00"} ,
+                       concertDate : {startedAt : "2023-09-08" ,  start_time : "09:00:00"},
+                       description : "hellobts2" ,
+                       link : "naver.com"
+                      } , {title :"뉴진스 투어" 
+                      , genre : "concert" , 
+                       player : "뉴진스" ,
+                        location : "1230/1112/3145" ,
+                         preTicketing : {startedAt : "2023-10-03" , start_time : "09:00:00"} ,  
+                         ticketing : {startedAt : "2023-10-04" , start_time : "10:00:00"} ,
+                         concertDate : {startedAt : "2023-10-05" ,  start_time : "09:00:00"},
+                         description : "helloqworld" ,
+                         link : "naver.com"
+                        } ,{title :"방탄 투어" 
+                        , genre : "concert" , 
+                         player : "방탄소년단" ,
+                          location : "1230/1112/3145" ,
+                           preTicketing : {startedAt : "2023-08-06" , start_time : "09:00:00"} ,  
+                           ticketing : {startedAt : "2023-08-07" , start_time : "10:00:00"} ,
+                           concertDate : {startedAt : "2023-08-08" ,  start_time : "09:00:00"},
+                           description : "helloqworld" ,
+                           link : "naver.com"
+                          } , {title :"뉴진스 투어2" 
+                          , genre : "concert" , 
+                           player : "뉴진스" ,
+                            location : "1230/1112/3145" ,
+                             preTicketing : {startedAt : "2023-09-06" , start_time : "09:00:00"} ,  
+                             ticketing : {startedAt : "2023-09-07" , start_time : "10:00:00"} ,
+                             concertDate : {startedAt : "2023-08-08" ,  start_time : "09:00:00"},
+                             description : "helloqworld" ,
+                             link : "naver.com"
+                            } , {title : "안녕 뉴진스"
+                            , genre : "concert" , 
+                             player : "뉴진스" ,
+                              location : "1230/1112/3145" ,
+                               preTicketing : {startedAt : "2023-10-06" , start_time : "09:00:00"} ,  
+                               ticketing : {startedAt : "2023-11-07" , start_time : "10:00:00"} ,
+                               concertDate : {startedAt : "2023-08-08" ,  start_time : "09:00:00"},
+                               description : "hellothere" ,
+                               link : "naver.com"
+                              } , {title :"안녕 방탄" 
+                              , genre : "concert" , 
+                               player : "방탄소년단" ,
+                                location : "1230/1112/3145" ,
+                                 preTicketing : {startedAt : "2023-10-06" , start_time : "09:00:00"} ,  
+                                 ticketing : {startedAt : "2023-10-07" , start_time : "10:00:00"} ,
+                                 concertDate : {startedAt : "2023-08-08" ,  start_time : "09:00:00"},
+                                 description : "hellowhere" ,
+                                 link : "naver.com"
+                                }  ]);
  
   
 
-  /*
+  
   const InfoPosts = async () => {
     try {
       const result = await getInfoPosts();
@@ -50,11 +168,10 @@ const Home = () => {
       console.error(err);
     }
   };
-  const playercross = async () =>{
-  
-  } */  
+   
 
   useEffect(() => {
+    InfoPosts();
     makeCross(); 
 
   }, []);
@@ -135,7 +252,8 @@ const Home = () => {
       <AiFillHeart style ={{color : "orange" }}/> 
       <a href = {data.link}><BsBookmarkStarFill style = {{color : "#bebebe"}} /></a>
       </div> 
-      <Fonty style = {{wordBreak : "normal" }}>{data.title} </Fonty>
+      <Fonty style = {{wordBreak : "normal" }}>  <img src={Profile3} 
+       style={{height : "180px" , width : "100%" , }}/>  </Fonty>
       
        <li style = {{fontSize : "15px" ,fontWeight : "bold" , margin : "0px 4px 15px 5px",
           display : "flex" }}> {data.player }  </li> 
@@ -246,7 +364,7 @@ border : none;
 const Fonty = styled.div` 
   font-family: 'Bungee', cursive;
    font-family: 'Ultra', serif;
-  height : 150px;
+  height : 180px;
   url : 'https://fonts.googleapis.com/css2?family=Bungee&family=Ultra&display=swap';
   font-size : 33px;
   background-color : #ffffff;

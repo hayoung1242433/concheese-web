@@ -65,17 +65,21 @@ const WriteConcert = () => {
     // 후처리
     const dates2 = dates.map((date) => {return (date === "") ? date = "정보없음 " : date }  )
     let [a , b ,c ,d , e, f ,g , h , i ] = dates2;
+    let altera = b.toString();
+    console.log(altera);
     console.log(dates2);
     const playerString = (playerList.length > 0 ) ? playerList.reduce( (accmulater , currentdata) => {return accmulater += "/" + currentdata}) : playerList;
     const placeString = (placeList.length > 0 ) ? placeList.reduce( (accmulater , currentdata) => {return accmulater += "/" + currentdata}) : placeList;
     let [playerString2] = [playerString]
     let [placeString2] = [placeString]
+    const placeString3 = placeString2.toString();
+    const playerString3 = playerString2.toString();
     console.log(playerString2);
     const form = {
       title : title , 
-      artist : playerString2 , 
-      genre : selectedGenre, 
-      location : placeString2,
+      artist : playerString3 , 
+      genre : "IDOL", 
+      location : placeString3,
       preTicketing :{
         startedAt : a, 
         startTime : c,
@@ -89,7 +93,7 @@ const WriteConcert = () => {
       },
       concertDate : {
         startedAt : g,
-        start_time : i
+        startTime : i
       }
       ,
       description : content,
@@ -110,7 +114,9 @@ const WriteConcert = () => {
       console.log(form)
     }
     else{
+    
     try{
+     console.log(JSON.stringify(form))
      await writeInfoPost(form);
     } 
     catch (err) {
@@ -286,7 +292,7 @@ const WriteConcert = () => {
             <div>
             <label htmlFor="title">참고링크</label>
             <br />
-            <Cont id ="link" type = "url"
+            <Cont id ="link"
              style = {{width : "60%" , height : "10%"}}
             onChange = {handleChange}/>
           </div>
