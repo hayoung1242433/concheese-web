@@ -1,21 +1,25 @@
 import { AiFillHeart } from "react-icons/ai";
 import { BsBookmarkStarFill } from "react-icons/bs";
 import styled from "styled-components";
-import Profile3 from "../assets/profile7.jpg";
+import { Link } from "react-router-dom";
 
-export default function HomeCard({ data }) {
+export default function HomeCard({ data  }) {
+
+  
+  
   return (
-    <>
+    <div style ={{ display : "absolute" , zIndex : "0"}}>
       <div style={{ display: "flex" }}>
-        <AiFillHeart style={{ color: "orange" }} />
+        <div>
+          <Link to={`/feed/info` } state ={{id : data.title}}>
+        <AiFillHeart style={{ color: "orange" }} /></Link>
         <a href={data.link}>
           <BsBookmarkStarFill style={{ color: "#bebebe" }} />
-        </a>
-      </div>
-      <Fonty style={{ wordBreak: "normal" }}>
-        {" "}
-        <img src={Profile3} style={{ height: "180px", width: "100%" }} />{" "}
-      </Fonty>
+        </a> </div>
+        <label style ={{  fontStyle : "italic" , fontWeight : "bold"}}> {data.title} </label> </div>
+   
+      <Fonty />
+        
 
       <li
         style={{
@@ -25,47 +29,45 @@ export default function HomeCard({ data }) {
           display: "flex",
         }}
       >
-        {" "}
-        {data.player}{" "}
+        
+        {data.player}
       </li>
       <div>
         <p style={{ display: "flex", gap: "55px", margin: " 5px 2px 5px" }}>
           <P>장르</P>
-          <p style={{ fontSize: "12px" }}>{data.genre}</p>{" "}
+          <p style={{ fontSize: "12px" }}>{data.genre}</p>
         </p>
 
         <p style={{ display: "flex", gap: "20px", margin: "5px 2px 5px " }}>
           <P>선예매날짜 </P>
           <p style={{ fontSize: "12px" }}>
-            {" "}
+            
             {data.preTicketing.startedAt}
-          </p>{" "}
+          </p>
         </p>
 
         <p style={{ display: "flex", gap: "20px", margin: "5px 2px 5px" }}>
           <P> 티켓팅날짜</P>
-          <p style={{ fontSize: "12px" }}>{data.ticketing.startedAt}</p>{" "}
+          <p style={{ fontSize: "12px" }}>{data.ticketing.startedAt}</p>
         </p>
 
         <p style={{ display: "flex", gap: "31px", margin: "5px 2px 5px " }}>
           <P>공연날짜 </P>
-          <p style={{ fontSize: "12px" }}>{data.concertDate.startedAt} </p>{" "}
+          <p style={{ fontSize: "12px" }}>{data.concertDate.startedAt} </p>
         </p>
 
         <p style={{ display: "flex", gap: "31px", margin: "5px 2px 5px " }}>
           <P>공연 장소</P>
-          <p style={{ fontSize: "12px" }}>{data.location}</p>{" "}
+          <p style={{ fontSize: "12px" }}>{data.location}</p>
         </p>
       </div>
-    </>
+    </div>
   );
 }
 
 const Fonty = styled.div`
-  font-family: "Bungee", cursive;
-  font-family: "Ultra", serif;
+  
   height: 180px;
-  url: "https://fonts.googleapis.com/css2?family=Bungee&family=Ultra&display=swap";
   font-size: 33px;
   background-color: #ffffff;
   text-align: center;
