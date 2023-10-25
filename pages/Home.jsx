@@ -2,14 +2,15 @@ import { keyframes, styled } from "styled-components";
 import Contents from "../layout/Contents";
 import Wrapper from "../layout/Wrapper";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { getInfoPosts } from "../api/api2";
 // react-icons 모음
-
 import { BsCalendarCheck } from "react-icons/bs";
 import { AiFillCheckCircle } from "react-icons/ai";
+import {AiOutlineSearch} from "react-icons/ai";
 import HomeCard from "../components/HomeCard";
 import HomeData from "../mock/home_data.json";
+
+
 
 const Home = () => {
   const [player, setPlayer] = useState("");
@@ -18,6 +19,13 @@ const Home = () => {
   const [datefilter, setDateFilter] = useState("");
   const [checkdate, setCheckDate] = useState(false);
   const [form, setForm] = useState(HomeData);
+  // 자동 완성 검색어 
+  const [array , setArray ] = useState([]);
+  const [array2 , setArray2] = useState([]);
+  const [array3 , setArray3] = useState([]);
+  const adjacency = {};
+  const [autoComplete , setAutoComplete] = useState(false);
+  // autoComplete가 false가 될 때 : onFocus 할 때 아니면 클릭했을 때 
 
   const InfoPosts = async () => {
     try {
@@ -31,23 +39,48 @@ const Home = () => {
 
   useEffect(() => {
     InfoPosts();
-    makeCross();
+    makealign();
   }, []);
 
-  const makeCross = () => {
-    const c = form.map((data) => {
-      const locationArray = spliting(data.location);
-      return { ...data, location: locationArray };
-    });
-    console.log(c);
-    setForm(c);
-  };
+  //값 정렬하기 
+  const makealign = () => {
+    const array = [];
+    const array2 = [];
+    const array3 = [];
+    // form에 맞춰서 객체 정렬 
+    form.map((a) => { 
+     
+        if(!adjacency.hasOwnProperty(a.player)){
+          adjacency[a.player] = [];
+         
+        }
+        adjacency[a.player].push(a.title);
+      })
+    for(let key in adjacency){
+      if(adjacency.hasOwnProperty(key)) {
+        array.push(key);
+        array.push(adjacency[key]);
+        array2.push(key);
+        array3.push(adjacency[key].length)
+      }
+    }
+    console.log(array.flat())
+    setArray(array.flat());
+    setArray2(array2);
+    setArray3(array3);
+    
+  }
+  
+  const autoFilter = (e) => {
+    setPlayer(e.target.value);
+   
+   const filtery = array.filter((arr) => arr.includes(player))
+    
+    setArray3("");
+    setArray2(filtery);
 
-  const spliting = (value) => {
-    const a = value;
-    const b = a.split("/");
-    return b;
-  };
+  }
+  
 
   const playerChange = (e) => {
     e.preventDefault();
@@ -84,6 +117,7 @@ const Home = () => {
 
   const cardRender = () => {
     let test = form;
+    console.log(test)
     if (datefilter.length !== 0 && date.length !== 0) {
       const checking = datefilter.slice(0, 4) + datefilter.slice(5, 7);
       switch (date) {
@@ -116,22 +150,30 @@ const Home = () => {
           break;
       }
     }
-    let test2 = test;
-    console.log(playerList);
-    console.log(test2);
+
+    let test2 =test
+    let test3 = test
     if (playerList.length !== 0) {
-      test2 = playerList
+
+     test2 = playerList
         .map((data) => {
-          return test.filter((datas) => datas.player.includes(data));
-        })
+          return test.filter((datas) => { 
+         return (datas.player.includes(data) || datas.title.includes(data))
+        })})
         .flat();
+     
+     test3 = test2.filter((data , index ) => 
+     { let a = test2.findIndex((data2) => {return (data.description === data2.description ) && (data.title === data2.title) } )
+      return index === a })
+
+    
     }
 
-    return test2.map((data) => {
+    return test3.map((data) => {
       return (
         <L_col>
           <Mold>
-            <HomeCard data={data} />
+            <HomeCard  data={data} />
           </Mold>
         </L_col>
       );
@@ -160,7 +202,6 @@ const Home = () => {
             setDate(e.target.value);
           }}
         >
-          {" "}
           <option>선택해주세요 </option> <option>선예매</option>
           <option>티켓팅 날짜 </option>
           <option> 공연 날짜 </option>
@@ -176,13 +217,16 @@ const Home = () => {
           onChange={(e) => {
             setDateFilter(e.target.value);
           }}
-        ></input>{" "}
+          
+        ></input>
       </div>
     );
   };
 
   return (
-    <Wrapper>
+    
+    <Wrapper >
+      
       <Contents>
         <div>
           <div style={{ display: "flex", gap: "5px" }}>
@@ -197,6 +241,7 @@ const Home = () => {
               />
             )}
             <div style={{ display: "flex", gap: "5px" }}>
+              <div>
               <input
                 value={player}
                 style={{
@@ -205,11 +250,17 @@ const Home = () => {
                   borderRadius: "7px",
                   margin: "5px",
                 }}
-                onChange={(e) => {
-                  setPlayer(e.target.value);
-                }}
+                onChange={autoFilter}
+                onClick = {() => {setAutoComplete(true)}}
               />
+              
+              {autoComplete ? <Autoa>
+                {array2.map((arr , i) => (<Auto><AiOutlineSearch/> <li onClick = {() => {setPlayer(arr); setAutoComplete(false)}}>{arr} {array3[i]}</li></Auto>))}</Autoa> : <ul></ul>}
             </div>
+            </div>
+          
+            <div>
+            
             <AiFillCheckCircle
               onClick={playerChange}
               style={{
@@ -219,13 +270,18 @@ const Home = () => {
                 margin: "5px",
               }}
             />
+              </div> 
             {playerRender()}
           </div>
-          <div></div>
-          <L_row>{cardRender()}</L_row>
-        </div>
+          
+          <L_row >{cardRender()}</L_row>
+         
+      
+      </div>
       </Contents>
+     
     </Wrapper>
+    
   );
 };
 
@@ -246,7 +302,7 @@ const Mold = styled.div`
   background-color: #f5f5dc;
   border-radius: 10px;
   overflow: hidden;
-  border: none;
+  border: 1px solid #e3f2f7;
 `;
 
 const Tag = styled.span`
@@ -257,5 +313,24 @@ const Tag = styled.span`
   font-size: 12px;
   cursor: pointer;
 `;
+
+const Autoa = styled.ul`
+position : absolute;
+z-index : 3; 
+width : 12%;
+background-color : #f5f5dc; 
+border-radius : 8px;
+
+`
+
+
+const Auto = styled.span`
+ display : flex;
+ &:hover {
+  background-color : #e9e4cf;
+ }
+`
+
+
 
 export default Home;

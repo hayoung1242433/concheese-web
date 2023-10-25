@@ -7,31 +7,27 @@ import { AiOutlineMinusSquare } from "react-icons/ai";
 import {writeInfoPost} from "../api/api2"
 
 
-const genretal = ["선택해주세요" ,"뮤지컬", "콘서트" , "연극" , "인디공연"] 
+const genretal = ["선택해주세요" ,"Concert", "Musical" , "Orchestra" , "Festival" , "Others"] 
 
 const WriteConcert = () => {
   // form 배치 순
   // 제목
   const [title, setTitle] = useState("");
   // 장르
-  const [genreList, setGenreList] = useState([...genretal]);
+  const [genreList , setGenreList] = useState(genretal);
   const [selectedGenre, setSelectedGenre] = useState("");
   // 가수
   const [player, setPlayer] = useState("");
   const [playerList, setPlayerList] = useState([]);
+  
   // 날짜 
-  /*
-  const [preticketing , setPreDateList] = useState("");
-  const [preticketing2, setPreDate2List] = useState("");
-  const [ticketdate , setTicketDate] = useState("");
-  const [ticketdate2, setTicket2Date] = useState("")
-  const [dateTime , setDateTimeList] = useState("");
-  const [dateRightTime , setDateRightTime] = useState("");
-  */
-  const [dates, setDate] = useState(["","","","","","","","",""]);
+  const [dates, setDate] = useState(["","","","","","" , "" , ""]);
   const [click , setClick] = useState( false);
-  // 장소
-  const [placeList, setPlaceList] = useState([]);
+
+  //공연 날짜 & 장소 
+  const [performancedate , setPerformanceDate] = useState("");
+  const [perstart , setPerStart] = useState("");
+  const [schedule , setSchedule] = useState([]);
   // 내용
   const [content, setContent] = useState("");
   // 링크 
@@ -46,7 +42,7 @@ const WriteConcert = () => {
   const handleChange = (event ) => {
     const data = event.target.id;
     switch (data) {
-      case "genre" : setSelectedGenre(event.target.value); break; // genre 바꾸기  
+      case "genre" : changeGenre(event.target.value); break; // genre 바꾸기  
       case "title" : setTitle(event.target.value); break;  // title 바꾸기 
       case "check" : setClick(!click); break; // 선예매 유무에 따라 날짜/ 시간 다르게 나타나게 
       case "link"   : setLink(event.target.value); break;
@@ -54,54 +50,46 @@ const WriteConcert = () => {
     
     }
   }
-  const handleDate = (event) => {
-    const date = dates.map((d , index) => {return ( (index === parseInt(event.target.id)) ?  d = event.target.value : d )})
-    setDate(date);
-    console.log(date);
 
-  }
+  // 장르바꾸기
+ const changeGenre = (data) => {
+   const data2 = data.toUpperCase();
+   setSelectedGenre(data2);
+ }
+
+ 
+  
   //제출  
   const setReturn = () =>  {
     // 후처리
-    const dates2 = dates.map((date) => {return (date === "") ? date = "정보없음 " : date }  )
-    let [a , b ,c ,d , e, f ,g , h , i ] = dates2;
-    let altera = b.toString();
-    console.log(altera);
-    console.log(dates2);
-    const playerString = (playerList.length > 0 ) ? playerList.reduce( (accmulater , currentdata) => {return accmulater += "/" + currentdata}) : playerList;
-    const placeString = (placeList.length > 0 ) ? placeList.reduce( (accmulater , currentdata) => {return accmulater += "/" + currentdata}) : placeList;
-    let [playerString2] = [playerString]
-    let [placeString2] = [placeString]
-    const placeString3 = placeString2.toString();
-    const playerString3 = playerString2.toString();
-    console.log(playerString2);
+    const dates2 = dates.map((date) => {return (date === "") ? date = "정보없음" : date }  ) 
+   
+    
+    let [a , b ,c , d , e , f , g , h] = dates2;
+    
+    
+    
     const form = {
       title : title , 
-      artist : playerString3 , 
-      genre : "IDOL", 
-      location : placeString3,
-      preTicketing :{
-        startedAt : a, 
-        startTime : c,
-        type : "PRE_SALE"
-      },
-      ticketing :{
-        startedAt : d,
-        startTime : f ,
-        type : "GENERAL_SALE"
-       
-      },
-      concertDate : {
-        startedAt : g,
-        startTime : i
-      }
-      ,
+      performers  : playerList , 
+      genre : selectedGenre , 
+      schedule : schedule ,
+      ticketing : [
+        {start : a + "T" + b + ":00" ,
+        end : c + "T" + d + ":00"  ,
+        status : "PRE_SALE"} ,
+        {start : e + "T" + f + ":00"  ,
+         end : g + "T" + h + ":00" ,
+         status : "GENERAL_SALE"
+        }
+      ], 
       description : content,
       link : link
     }
 
-   //비동기 문제가 있음으로 그냥 setForm을 이용해서 form을 넣지 않는다. 
-   getPosts(form);
+   console.log(form)
+   //비동기 문제가 있음으로 그냥 form을 이용해서 값을 넣는다 
+  //getPosts(form);
    // 다시 시작 
 
   }
@@ -126,26 +114,50 @@ const WriteConcert = () => {
 
   }
 
+ //날짜 시간 맞춰서 
+ const handleDate = (event) => {
+  const date = dates.map((d , index) => {return ( (index === parseInt(event.target.id)) ?  d = event.target.value : d )})
+  setDate(date);
+  console.log(date);
+
+}
+
+// schedule(공연날짜 + 시간 ) 만들기 
+ const handleSchedule1 = (event) => {
+  const data = event.target.value;
+  const type = event.target.id;
+  
+  switch (type ) {
+    case "date" : setPerformanceDate(data); break;
+    case "time" : setPerStart(data); break; 
+  } 
+  
+
+
+  }
  
 
   // 장소 
   const addPlaceHandler = (e) => {
+    const previousdate = performancedate + "T" + perstart + ":00"
     new daum.Postcode({
       oncomplete: function (data) {
         // 날짜당
         const code = parseInt(data.zonecode)
-        setPlaceList([...placeList, code]);
+        setSchedule( [...schedule , {timestamp : previousdate , postal : code} ])
       },
     }).open();
+    setPerformanceDate("");
+    setPerStart("");
   };
 
   const subPlaceHandler = (e) => {
-    const data1 = e; // {}로 묶인 함수와 함수의 차이 event를 자동으로 받느냐 아니냐 차이
-    console.log(data1);
-    const data2 = placeList.filter((data) => {
-      return data1 !== data;
+    
+    const data2 = schedule.filter((sch) => {
+      return sch.postal !== e
+    
     });
-    setPlaceList(data2);
+    setSchedule(data2);
   };
   
   //공연자 
@@ -153,6 +165,7 @@ const WriteConcert = () => {
     e.preventDefault();
     setPlayerList([...playerList, player]);
     setPlayer("");
+    
   };
 
   const playerRender = () =>{
@@ -177,8 +190,9 @@ const WriteConcert = () => {
             <label htmlFor="ticketDate">선예매 날짜</label> / <label htmlFor="time">선예매 시간</label>
             <br/>
             <Date  id = "0" type = "date" onChange = {handleDate} /> 
-            <Date  id = "1" type = "date" style = {{ margin : "10px"}} onChange ={handleDate} />  <br/> 
-            <Date id = "2" type = "time" onChange = {handleDate} /> 
+            <Date  id = "1" type = "time" style = {{ margin : "5px"}} onChange ={handleDate} />  <br/> 
+            <Date  id = "2" type = "date" onChange = {handleDate} /> 
+            <Date  id = "3" type = "time" style = {{ margin : "5px"}} onChange ={handleDate} />
           </div> }
        </>    
           )
@@ -198,26 +212,26 @@ const WriteConcert = () => {
             }}
            >
            <label htmlFor="title">제목</label>
-            <Cont id = "title" 
-            style = {{width: "20%",
-                     height : "20%" }}
+            <Cont id = "title" style ={{ width : "20%" , height : "10%"}}
             onChange = {handleChange}/> </div> 
 
 
-          <div style={{ marginTop: "10px" }}>
+          <div style={{ marginTop: "0px" }}>
             <div style={{ display: "flex" }}>
-              가수
+    
               <div>
-                <label htmlFor="player" />
+                <label htmlFor="player" > 가수 </label>
                 <Cont
                   value={player}
                   id="player"
-                  style={{ width: " 40%", height: "50%", padding: "3px" }}
+                  style={{ width: " 40%", height: "50%" , margin : "0px 5px 10px 10px" }}
                   onChange={(e) => {
                     setPlayer(e.target.value);
+                    
                   }}
                 />
-                <BsFillPlusCircleFill style ={{color : "orange"}}onClick={addPlayerHandler}/>
+                <BsFillPlusCircleFill style ={{color : "orange"
+                , margin : "10px 0px 0px 0px" }}onClick={addPlayerHandler}/>
               </div>
             </div>
             <div style={{ display: "flex", gap: "3px" }}>
@@ -225,10 +239,10 @@ const WriteConcert = () => {
             </div>
 
             <div style={{ marginTop: "20px" , display : "flex"}}>
-            <p style={{ marginBottom: "20px" }}>장르 </p> 
+            <p style={{ marginBottom: "30px"  }}>장르 </p> 
             
               <label htmlFor = "genre" />
-              <Select 
+              <Select  style = {{borderRadius :"10px"}}
               id = "genre"
                onChange = {handleChange}>
              {genreList.map((v) => {
@@ -244,37 +258,37 @@ const WriteConcert = () => {
           <div> 날짜 </div> 
           <p style = {{fontSize : "10px"}}>선예매 유무
           <input id = "check" type="checkbox" onClick = {handleChange} 
-          style= {{margin : "10px" , backgroundColor : '#B5EBEB'}}  /> </p>
+          style= {{margin : "10px" , backgroundColor : 'orange'}}  /> </p>
           <div > {popup()} </div> 
 
           <div style={{ margin: "10px 0 20px 0" }}>
-            <label htmlFor="ticketDate" style = {{fontSize : "10px" }}>티켓팅 날짜 / 시작 시간 </label>
+            <label htmlFor="ticketDate" style = {{fontSize : "10px" }}>티켓팅 날짜 / 티켓팅 시작 시간 </label>
              <br/> 
-             <Date id = "3" type ="date" onChange = {handleDate} style ={{margin : "5px"}} />  ~ 
-             <Date id = "4" type = "date" onChange ={handleDate} />  <br/> 
-             <Date id = "5" type ="time" onChange = {handleDate} style ={{margin : "5px"}} /> 
+             <Date id = "4" type ="date" onChange = {handleDate} />  
+             <Date id = "5" type ="time" onChange = {handleDate} style ={{margin : "5px"}}  /> <br/> 
+             <Date id = "6" type = "date" onChange ={handleDate} /> 
+             <Date id = "7" type ="time" onChange = {handleDate} style ={{margin : "5px"}} /> 
           </div>
 
-          <div style={{ margin: "10px 0 20px 0" }}>
+          <div style={{ margin: "10px 0 0px 0" }}>
             <label htmlFor="ticketDate" style = {{fontSize : "10px" }}> 공연 날짜 / 시작 시간 </label>
              <br/> 
-             <Date id ="6" type ="date" style = {{margin : "5px"}} onChange = {handleDate} />  ~
-             <Date id = "7" type ="date" style ={{margin : "5px"}} onChange = {handleDate} />  <br/> 
-             <Date id = "8" type = "time" onChange = {handleDate} /> 
+             <Date id = "date" type ="date" value = {performancedate} style = {{margin : "5px"}} onChange = {handleSchedule1} />  
+             <Date id = "time" type = "time" value = {perstart} onChange = {handleSchedule1} /> 
              
           </div>
+          {((performancedate.length !== 0 && perstart.length !== 0) ) ? 
            <div> 
-            <label>공연 장소 [날짜순] </label>
+            <label style ={{margin : "5px"}}>공연 장소 [날짜순] </label>
            
             <BsFillPlusCircleFill 
             style= {{cursor : "pointer" ,color : "orange"}}
             onClick = {addPlaceHandler} />
           
-            {placeList.map((v) => {
-              return  <div key={v}>{v}<AiOutlineMinusSquare value = {v} key = {v} onClick = { () => subPlaceHandler(v)} /></div>;
+          </div> : <p style = {{fontSize : "10px" ,color : "grey" , margin : "5px"}}> 공연 날짜와 시작시간을 입력해 주세요 </p> }
+          {schedule.map((v) => {
+              return  <div key={v.postal} >{v.timestamp} / {v.postal} <AiOutlineMinusSquare onClick = {() => {subPlaceHandler(v.postal)}}/> </div>;
             })}
-          
-          </div>
 
           
           <div>
@@ -296,7 +310,7 @@ const WriteConcert = () => {
              style = {{width : "60%" , height : "10%"}}
             onChange = {handleChange}/>
           </div>
-          <button style = {{backgroundColor : "orange" ,border : "none" , borderRadius : "8px"}} 
+          <button style = {{backgroundColor : "orange" ,border : "none" , borderRadius : "8px" , margin : "0px 0px 10px 0px"}} 
           onClick = {() => {setReturn()}} >제출하기</button>
           </div>  </form> 
       </Contents>

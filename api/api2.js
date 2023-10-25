@@ -12,6 +12,19 @@ export async function getInfoPosts() {
     console.log("body: ", body);
     return body;
   }
+
+ //  3) 과제 수행을 위해 건드림 
+export async function getInfoPosts2(id) {
+  const response = await fetch( 
+    `http://swacademy.null0xff.com:8080/api/v1/concert/info${id}`
+  )
+  if(!response.ok) { 
+    throw new Error("getPost2에 문제가 생김!")
+  }
+  const body = await response.json();
+  console.log("body : " , body);
+  return body;
+}
   
   export async function writeInfoPost(formData) {
     console.log(formData);

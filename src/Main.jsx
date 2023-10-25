@@ -11,19 +11,21 @@ import Login from "../pages/Login";
 const Main = () => {
 
   return (
+    
     <BrowserRouter>
       <App>
         <Routes>
-          <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home />} />
           <Route path="login" element={<Login />} />
           <Route path="feed/" element={<Feed />}>
             <Route path="info" element={<Info />} />
             <Route path="free" element={<Free />} />
-          </Route>
+          </Route>          
           <Route path="/writeConcert" element={<WriteConcert />} />
         </Routes>
       </App>
     </BrowserRouter>
+    
   );
 };
 
