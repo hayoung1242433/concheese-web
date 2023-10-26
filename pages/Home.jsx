@@ -30,7 +30,7 @@ const Home = () => {
   const InfoPosts = async () => {
     try {
       const result = await getInfoPosts();
-      console.log(result);
+      
       setForm(result);
     } catch (err) {
       console.error(err);
@@ -39,8 +39,25 @@ const Home = () => {
 
   useEffect(() => {
     InfoPosts();
+    dateFilter();
     makealign();
   }, []);
+
+  // dateFilter => 공연 시작 날짜 , 선예매 날짜 , 티켓팅 날짜 시작 기간 
+  const dateFilter = () => {
+
+    const tempform = form.map((data) => {
+      let a = data.ticketing.map((t) => { 
+        return { ... t , start : t.start.slice(0 , 10 ) , end : t.end.slice(0 , 10) }})
+      let b = data.schedule.map((s) => {return {...s , timestamp : s.timestamp.slice(0 , 10 )}})
+      return {...data , schedule : b , ticketing : a }
+    })
+
+    
+
+    setForm(tempform)
+    
+  }
 
   //값 정렬하기 
   const makealign = () => {
@@ -49,13 +66,14 @@ const Home = () => {
     const array3 = [];
     // form에 맞춰서 객체 정렬 
     form.map((a) => { 
-     
-        if(!adjacency.hasOwnProperty(a.player)){
-          adjacency[a.player] = [];
-         
+        
+      a.player.map((b) => {
+        if(!adjacency.hasOwnProperty(b)){
+          adjacency[b] = [];
         }
-        adjacency[a.player].push(a.title);
-      })
+        adjacency[b].push(a.title);
+      }) } ) 
+       
     for(let key in adjacency){
       if(adjacency.hasOwnProperty(key)) {
         array.push(key);
@@ -84,20 +102,22 @@ const Home = () => {
 
   const playerChange = (e) => {
     e.preventDefault();
+    setAutoComplete(false);
+    if (player.length !== 0){
     const playerlist = playerList.filter((data) => {
-      return data !== player;
+      return data !== player 
     });
-
+    
     setPlayerList([...playerlist, player]);
     console.log(playerlist);
-    setPlayer("");
+    setPlayer("");}
   };
 
   const playerRender = () => {
     return playerList.map((v) => {
       return (
         <Tag key={v} onClick={() => playerDelete(v)}>
-          {v}{" "}
+          {v}
           <button
             key={v}
             value={v}
@@ -119,34 +139,33 @@ const Home = () => {
     let test = form;
     console.log(test)
     if (datefilter.length !== 0 && date.length !== 0) {
-      const checking = datefilter.slice(0, 4) + datefilter.slice(5, 7);
+      console.log(datefilter)
+      
       switch (date) {
         case "선예매":
           test = form.filter((data) => {
+            console.log(data.ticketing[0].start.slice(0,7))
             return (
-              data.preTicketing.startedAt.slice(0, 4) +
-                data.preTicketing.startedAt.slice(5, 7) ===
-              checking
+              data.ticketing[0].start.slice(0,7) ===
+              datefilter 
             );
           });
           break;
         case "티켓팅 날짜":
           test = form.filter((data) => {
             return (
-              data.ticketing.startedAt.slice(0, 4) +
-                data.ticketing.startedAt.slice(5, 7) ===
-              checking
+             data.ticketing[1].start.slice(0,7) ===
+              datefilter
             );
           });
           break;
         case "공연 날짜":
           test = form.filter((data) => {
-            return (
-              data.concertDate.startedAt.slice(0, 4) +
-                data.concertDate.startedAt.slice(5, 7) ===
-              checking
+              let a = data.schedule.findIndex((data2) => (
+                data2.timestamp.slice(0, 7) === datefilter ))
+             return (a === -1) ? true : false }
+             
             );
-          });
           break;
       }
     }
@@ -158,13 +177,15 @@ const Home = () => {
      test2 = playerList
         .map((data) => {
           return test.filter((datas) => { 
-         return (datas.player.includes(data) || datas.title.includes(data))
+            let a = datas.player.findIndex((dat) => {return dat.includes(data)})
+         return (a !== -1 || datas.title.includes(data))
         })})
         .flat();
      
      test3 = test2.filter((data , index ) => 
      { let a = test2.findIndex((data2) => {return (data.description === data2.description ) && (data.title === data2.title) } )
       return index === a })
+
 
     
     }
@@ -191,13 +212,7 @@ const Home = () => {
   const setallDate = () => {
     return (
       <div style={{ display: "flex" }}>
-        <select
-          style={{
-            backgroundColor: "#f5f5dc",
-            border: "none",
-            borderRadius: "7px",
-            margin: "5px",
-          }}
+        <DateSelect 
           onChange={(e) => {
             setDate(e.target.value);
           }}
@@ -205,7 +220,7 @@ const Home = () => {
           <option>선택해주세요 </option> <option>선예매</option>
           <option>티켓팅 날짜 </option>
           <option> 공연 날짜 </option>
-        </select>
+        </DateSelect>
         <input
           type="month"
           style={{
@@ -313,6 +328,14 @@ const Tag = styled.span`
   font-size: 12px;
   cursor: pointer;
 `;
+
+const DateSelect = styled.select`
+background-color: #f5f5dc;
+border: none;
+border-radius: 7px;
+margin: 5px;
+
+`
 
 const Autoa = styled.ul`
 position : absolute;

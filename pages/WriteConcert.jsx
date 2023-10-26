@@ -56,16 +56,28 @@ const WriteConcert = () => {
    const data2 = data.toUpperCase();
    setSelectedGenre(data2);
  }
-
+ 
  
   
   //제출  
   const setReturn = () =>  {
     // 후처리
     const dates2 = dates.map((date) => {return (date === "") ? date = "정보없음" : date }  ) 
-   
-    
     let [a , b ,c , d , e , f , g , h] = dates2;
+
+
+  
+    const y = new Date(a + " " + b);
+    const x = new Date(c + " " + d);
+    const z = new Date(e + " " + f);
+    const i = new Date(g + " " + h);
+
+    const schedule2 = schedule.map((data) => { 
+      let a = new Date(data.timestamp)
+      return {...data , timestamp : a } // id : 숫자 , postal : 12343  , concert_id : 13425 // concert :{13425}
+    })
+    
+    console.log(schedule2)
     
     
     
@@ -73,13 +85,13 @@ const WriteConcert = () => {
       title : title , 
       performers  : playerList , 
       genre : selectedGenre , 
-      schedule : schedule ,
+      schedule : schedule2 ,
       ticketing : [
-        {start : a + "T" + b + ":00" ,
-        end : c + "T" + d + ":00"  ,
+        {start : y ,
+        end : x  ,
         status : "PRE_SALE"} ,
-        {start : e + "T" + f + ":00"  ,
-         end : g + "T" + h + ":00" ,
+        {start : z ,
+         end : i ,
          status : "GENERAL_SALE"
         }
       ], 
@@ -89,7 +101,7 @@ const WriteConcert = () => {
 
    console.log(form)
    //비동기 문제가 있음으로 그냥 form을 이용해서 값을 넣는다 
-  //getPosts(form);
+  getPosts(form);
    // 다시 시작 
 
   }
@@ -139,7 +151,7 @@ const WriteConcert = () => {
 
   // 장소 
   const addPlaceHandler = (e) => {
-    const previousdate = performancedate + "T" + perstart + ":00"
+    const previousdate = performancedate + " " + perstart
     new daum.Postcode({
       oncomplete: function (data) {
         // 날짜당
@@ -189,10 +201,10 @@ const WriteConcert = () => {
       {click === true && <div style={{ margin : `10px 0 20px 0` , fontSize : '10px' }}>
             <label htmlFor="ticketDate">선예매 날짜</label> / <label htmlFor="time">선예매 시간</label>
             <br/>
-            <Date  id = "0" type = "date" onChange = {handleDate} /> 
-            <Date  id = "1" type = "time" style = {{ margin : "5px"}} onChange ={handleDate} />  <br/> 
-            <Date  id = "2" type = "date" onChange = {handleDate} /> 
-            <Date  id = "3" type = "time" style = {{ margin : "5px"}} onChange ={handleDate} />
+            <Datey  id = "0" type = "date" onChange = {handleDate} /> 
+            <Datey  id = "1" type = "time" style = {{ margin : "5px"}} onChange ={handleDate} />  <br/> 
+            <Datey  id = "2" type = "date" onChange = {handleDate} /> 
+            <Datey  id = "3" type = "time" style = {{ margin : "5px"}} onChange ={handleDate} />
           </div> }
        </>    
           )
@@ -264,17 +276,17 @@ const WriteConcert = () => {
           <div style={{ margin: "10px 0 20px 0" }}>
             <label htmlFor="ticketDate" style = {{fontSize : "10px" }}>티켓팅 날짜 / 티켓팅 시작 시간 </label>
              <br/> 
-             <Date id = "4" type ="date" onChange = {handleDate} />  
-             <Date id = "5" type ="time" onChange = {handleDate} style ={{margin : "5px"}}  /> <br/> 
-             <Date id = "6" type = "date" onChange ={handleDate} /> 
-             <Date id = "7" type ="time" onChange = {handleDate} style ={{margin : "5px"}} /> 
+             <Datey id = "4" type ="date" onChange = {handleDate} />  
+             <Datey id = "5" type ="time" onChange = {handleDate} style ={{margin : "5px"}}  /> <br/> 
+             <Datey id = "6" type = "date" onChange ={handleDate} /> 
+             <Datey id = "7" type ="time" onChange = {handleDate} style ={{margin : "5px"}} /> 
           </div>
 
           <div style={{ margin: "10px 0 0px 0" }}>
             <label htmlFor="ticketDate" style = {{fontSize : "10px" }}> 공연 날짜 / 시작 시간 </label>
              <br/> 
-             <Date id = "date" type ="date" value = {performancedate} style = {{margin : "5px"}} onChange = {handleSchedule1} />  
-             <Date id = "time" type = "time" value = {perstart} onChange = {handleSchedule1} /> 
+             <Datey id = "date" type ="date" value = {performancedate} style = {{margin : "5px"}} onChange = {handleSchedule1} />  
+             <Datey id = "time" type = "time" value = {perstart} onChange = {handleSchedule1} /> 
              
           </div>
           {((performancedate.length !== 0 && perstart.length !== 0) ) ? 
@@ -349,7 +361,7 @@ const Select = styled.select`
   background-color: #e9ecef;
   border-radius: "5px";
 `;
-const Date = styled.input`
+const Datey = styled.input`
   type: date;
   border: none;
   background-color: #e9ecef;
