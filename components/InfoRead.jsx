@@ -23,7 +23,7 @@ export default function InfoRead({ data }) {
                         }}>{data.genre}</span>
                     </div>
 
-                    <Im>{data.player}</Im>
+                    <Im>{data.player[0]}</Im>
                     <div style={{ display: "flex" }}>
                         <h3 style={{
                             margin: "5px 0px 5px 8px"
@@ -36,15 +36,18 @@ export default function InfoRead({ data }) {
 
                         <div onClick={() => { setTempCheck(!tempChecked) }}>
                             <div style={{ margin: "7px" }}>
-                                <P>선예매 날짜 </P>
-                                <P2>({data.preTicketing.start_time}) {data.preTicketing.startedAt} </P2>
+                                <P>선예매 날짜 / 시간 </P>
+                                <P2> {data.ticketing[0].start} </P2>
+                                <P2>{data.ticketing[0].end}</P2>
                                 <P>티켓팅 날짜 </P>
-                                <P2>({data.ticketing.start_time}) {data.ticketing.startedAt} </P2>
-                                <P>공연 날짜 </P>
-                                <P2>({data.concertDate.start_time}) {data.concertDate.startedAt} </P2>
-                                <P>공연 장소 </P>
-                                <P2>{data.location}</P2>
-                                <P>내용</P>
+                                <P2> {data.ticketing[1].start} </P2>
+                                <P2>{data.ticketing[1].end}</P2>
+                                <P>공연 날짜 /장소  </P>
+                                {data.schedule.map((d) => {
+                                    return <P2> [{d.postal}] {d.timestamp.slice(0, 10 )}  </P2>
+                                })}
+                              
+                                <P>내용</P> 
                                 <P2>{data.description}</P2>
                                 <a style={{ fontSize: "14px", fontWeight: "bold" }} href={data.link}>{data.link}</a>
                             </div>
