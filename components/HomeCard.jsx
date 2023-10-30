@@ -2,10 +2,9 @@ import { AiFillHeart } from "react-icons/ai";
 import { BsBookmarkStarFill } from "react-icons/bs";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { useState} from "react";
+
 
 export default function HomeCard({ data  }) {
-  const [click , setClick] = useState(false);
   
   const scheduleDateRender = () => { 
    
@@ -15,7 +14,6 @@ export default function HomeCard({ data  }) {
       return <p style ={{ fontSize : "12px"}}> {dat.dateTime.slice(0,10)}/{dat.postalCode } </p> 
     }))
   }
-
 
   
   
@@ -35,7 +33,7 @@ export default function HomeCard({ data  }) {
       
       <L>  {data.performers[0].name} </L>
        
-     
+
       <div>
         <p style={{ display: "flex", gap: "65px", margin: " 0px 2px 5px" }}>
           <P>장르</P>
@@ -45,12 +43,12 @@ export default function HomeCard({ data  }) {
         <p style={{ display: "flex", gap: "33px", margin: "5px 2px 5px " }}>
           <P>선예매날짜 </P>
           <p style={{ fontSize: "12px" }}>
-            {data.ticketings[0].start.slice(0,10)}
+            {data.ticketings[0].start?.slice(0,10)}
           </p>
         </p>
         <p style={{ display: "flex", gap: "35px", margin: "5px 2px 5px" }}>
           <P> 티켓팅날짜</P>
-          <p style={{ fontSize: "12px" }}>{data.ticketings[1].start.slice(0,10)}</p>
+          <p style={{ fontSize: "12px" }}>{data.ticketings[1].start?.slice(0,10)}</p>
         </p>
 
         <p style={{ display: "flex", gap: "10px", margin: "5px 2px 5px " }}>

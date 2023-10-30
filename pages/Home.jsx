@@ -13,8 +13,7 @@ import HomeCard from "../components/HomeCard";
 
 
 const Home = () => {
-  const [player, setPlayer] = useState("");
-  const [playerList, setPlayerList] = useState([]);
+  
   const [date, setDate] = useState("");
   const [datefilter, setDateFilter] = useState("");
   const [checkdate, setCheckDate] = useState(false);
@@ -23,85 +22,109 @@ const Home = () => {
   const [array , setArray ] = useState([]);
   const [array2 , setArray2] = useState([]);
   const [array3 , setArray3] = useState([]);
-  const [array4 , setArray4] = useState([])
   const [autoComplete , setAutoComplete] = useState(false);
-  // autoComplete가 false가 될 때 : onFocus 할 때 아니면 클릭했을 때 
+  // 값을 전달 할 때 
+  const [titley , setTitle] = useState([])
+  const [performersy , setPerformers] = useState([])
+  const [totalList , setTotalList] = useState([])
+  const [temple , setTemple] = useState("")
+  const [checkWhich , setCheckWhich] = useState("")
+  
 
+  useEffect(() => {
+   InfoPosts();
+   
+  }, []);
+  
+  // 값을 받기 
   const InfoPosts = async () => {
     try {
      const result = await getInfoPosts();
-      console.log(result)
-     setForm(result);
+     
+      setForm(result)
+      makealign(result)
+     
     } catch (err) {
       console.error(err);
     }
  
   };
 
-  useEffect(() => {
-   InfoPosts();
-   makealign();
-  }, []);
-
   
   //초기 자동완성 만들기  
-  const makealign = async () => {
-    console.log(form)
+  const makealign = async (result) => {
+    
     const array = [];
     const array2 = [];
-    const array3 = [];
+    
     
     // form에 맞춰서 객체 정렬 
-    form.map((a) => { 
+    result.map((a) => { 
       array.push(a.title)
       a.performers.map((b) => {
-        array.push("-" + b.name)
-        array3.push(b.name)
+        array2.push(b.name)
       })
-        array2.push(a.title);
+       
           }
     )
     
    const tempArray = [... new Set(array)];
    const tempArray2 = [... new Set(array2)];
-   const tempArray3 = [... new Set(array3)];
-    
+
+    setForm(result);
     setArray(tempArray);
     setArray2(tempArray2); 
-    setArray3(tempArray3);
-    setArray4(tempArray); 
+    setArray3(tempArray);
     
   }
   
   // 값을 저장하고 일치하는 것 출력 
   const autoFilter = (e) => {
-    setPlayer(e.target.value);
-   console.log(array4)
-   console.log(e.target.value)
-   const filtery = array.filter((arr) => arr.includes(e.target.value))
-    setArray4(filtery);
+    console.log(checkWhich)
+    let fitty = array;
+    if(checkWhich === "제목"){
+      
+      fitty = array.filter((arr) => arr.includes(e.target.value))
+      
+    }
+    else if(checkWhich === "가수"){
+     
+      fitty = array2.filter((arr) => arr.includes(e.target.value))
+      
+    }
+    setTemple(e.target.value)
+    setArray3(fitty)
     
   }
+
+  
   
 
   const playerChange = (e) => {
     e.preventDefault();
     setAutoComplete(false);
     
-    if (player.length !== 0){
-    const playerlist = playerList.filter((data) => {
-      return data !== player 
-    });
-    
- 
-    setPlayerList([...playerlist, player]);
-   
-    setPlayer("");}
+    if (temple.length !== 0){
+      if(checkWhich === "가수"){
+        if(!performersy.includes(temple)){
+           setPerformers([...performersy , temple])
+        }
+      }
+      else if(checkWhich === "제목"){
+        if(!titley.includes(temple)){
+          setTitle([...titley , temple])
+        }
+      }
+
+  
+    setTotalList([...totalList , temple])
+    setTemple("");}
   };
 
   const playerRender = () => {
     
-    return playerList.map((v) => {
+    
+    return totalList.map((v) => {
       return (
         <Tag key={v} onClick={() => playerDelete(v)}>
           {v}
@@ -120,59 +143,35 @@ const Home = () => {
       );
     });
   };
-
+  
   const playerDelete = (v) => {
-    setPlayerList(
-      playerList.filter((data) => {
+    setTotalList(
+    totalList.filter((data) => {
         return data !== v;
       })
     );
   };
 
+  const getInfo = async () =>{
+    const result =  await getInfoFilter( p , "performer")
 
-  //filter 
-  const infoFilter =async  (a , b ) => {
-    try {
-      const result = await getInfoFilter( a , b );
-       console.log(result)
-       return result;
-     } catch (err) {
-       console.error(err);
-     }
   }
 
-  const infoCheck = async (a) => {
-    let b = a;
-    if(array2.includes(a)){
-       b = array2.filter(d => d === a)
-      return  infoFilter(b , "title")
-    } 
-    else if (array3.includes(a) ) {
-      b = array3.filter(d => d === a)
-     return infoFilter(b , "performer")
-    }
-    
-   
-  }
-  const cardRender = () => {
-    console.log(playerList);
+  
+  const cardRender =  () => {
     let test = form;
     let test2 =form;
     let test3 = form;
     
      // 공연자, 공연 이름 filter 
-    if (playerList.length !== 0) {
-
-     test = playerList
-        .map((data) => { 
-         let tempData =  (data.slice(0,1) === "-") ? infoFilter(data.slice(1, data.length) , "performer") : infoCheck(data)
-         return tempData 
-        }  ) 
-    // 중복 필터 
-    test2 = test.filter((t) => { let d = test.findIndex((i) => { return (d.title === i.title && d.description === i.description )} )
-       return (d === -1) ? t : console.log("") 
-  })
+    if (performersy.length !== 0) {
+      test2 = performersy.map((p) => { return   getInfoFilter( p  , "performer")})
     } 
+    else if(titley.length !== 0 ){
+      test2 = titley.map((t) => { return getInfoFilter(t , "title")})
+    }
+
+
    
    // 날짜 필터 
     if (datefilter.length !== 0 && date.length !== 0) {
@@ -274,7 +273,7 @@ const Home = () => {
             <div style={{ display: "flex", gap: "5px" }}>
               <div>
               <input
-                value={player}
+                value={temple}
                 style={{
                   backgroundColor: "#f5f5dc",
                   border: "none",
@@ -286,12 +285,13 @@ const Home = () => {
               />
               
               {autoComplete ? <Autoa>
-                {array4.map((arr) => (<Auto><AiOutlineSearch/> <li onClick = {() => {setPlayer(arr); setAutoComplete(false)}}>
+                {array3.map((arr) => (<Auto><AiOutlineSearch/> <li onClick = {() => {setTemple(arr); setAutoComplete(false)}}>
                 {arr} </li></Auto>))}</Autoa> : <ul></ul>}
             </div>
+
             </div>
           
-            <div>
+           
             
             <AiFillCheckCircle
               onClick={playerChange}
@@ -302,7 +302,18 @@ const Home = () => {
                 margin: "5px",
               }}
             />
-              </div> 
+
+      <DateSelect 
+          onChange={(e) => {
+            setCheckWhich(e.target.value)
+          }}
+        >
+          <option>선택해주세요 </option> 
+          <option> 제목 </option>
+          <option> 가수 </option>
+        </DateSelect>
+
+              
             {playerRender()}
           </div>
           

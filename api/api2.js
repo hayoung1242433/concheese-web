@@ -17,7 +17,7 @@ export async function getInfoPosts() {
  // filter하기 
  export async function getInfoFilter(id , index) {
   
-  const response = await fetch(EndPoint + `/list?${index}="${id}"`)
+  const response = await fetch(EndPoint + `/list?${index}=${id}`)
   if(!response.ok){
     throw new Error("filter에 문제가 생김")
     
@@ -54,7 +54,7 @@ export async function getInfoPosts() {
     return body;
   }
   
-  export async function updateInfoPost(id, formData ) {
+  export async function updateInfoPost(formData ) {
     const url = EndPoint + `/update`;
     const response = await fetch(url, {
       method: "PUT",

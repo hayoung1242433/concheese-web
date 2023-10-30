@@ -5,7 +5,7 @@ import { AiOutlineHeart } from "react-icons/ai";
 import { useState , useEffect } from 'react';
 import { AiFillCheckCircle } from "react-icons/ai"
 import { getInfoPosts } from "../api/api2"
-import InfoRead from "../components/infoRead";
+import Infos from "../components/Infos";
 
 
 export default function Info() {
@@ -98,7 +98,7 @@ export default function Info() {
 
     return (
       <>
-        {test1.map((data, i) => <InfoRead key={i} data={data} />)}
+        {test1.map((data, i) => <Infos key={i} data={data} />)}
       </>
     )
   }
