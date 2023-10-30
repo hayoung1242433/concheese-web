@@ -8,7 +8,7 @@ import { BsCalendarCheck } from "react-icons/bs";
 import { AiFillCheckCircle } from "react-icons/ai";
 import {AiOutlineSearch} from "react-icons/ai";
 import HomeCard from "../components/HomeCard";
-import HomeData from "../mock/home_data.json";
+
 
 
 
@@ -18,7 +18,7 @@ const Home = () => {
   const [date, setDate] = useState("");
   const [datefilter, setDateFilter] = useState("");
   const [checkdate, setCheckDate] = useState(false);
-  const [form, setForm] = useState(HomeData);
+  const [form, setForm] = useState([]);
   // 자동 완성 검색어 
   const [array , setArray ] = useState([]);
   const [array2 , setArray2] = useState([]);

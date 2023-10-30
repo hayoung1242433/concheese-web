@@ -6,33 +6,32 @@ import { useState , useEffect } from 'react';
 import { AiFillCheckCircle } from "react-icons/ai"
 import { getInfoPosts } from "../api/api2"
 import InfoRead from "../components/infoRead";
-import HomeData from "../mock/home_data.json";
 
 
 export default function Info() {
   const [artist, setArtist] = useState("");
   const [artistList, setArtistList] = useState([]);
-  const [form, setForm] = useState(HomeData);
+  const [form, setForm] = useState([]);
   
   const a = useLocation()
 
   // 바로 받았을 때 게시판 하나만 표시 
   useEffect(() => {
     getPosts();
-    checking()
   } , [])
 
-  const checking = () =>{
-    if(a.state === null){
-      console.log(a)
-     
+  const checking = async (result) =>{
+    console.log(a);
+    if(a.state === null ){
+      setForm(result)
     }
     else{
-    const temp = form; 
-     const tempFilter =  temp.filter((ie) => (ie.id === a.state.id ))
-     setForm(tempFilter);
+      const tempFilter = result.filter((ie) => (ie.id === a.state.id))
+      setForm(tempFilter)
+    }
+   
     } 
-  }
+  
     
     
   
@@ -42,11 +41,13 @@ export default function Info() {
   const getPosts = async () => {
     try {
      const result = await getInfoPosts();
-      console.log(result)
-     setForm(result);
+     checking(result)
+     //setForm(result);
     } catch (err) {
       console.error(err);
     }
+    
+    
  
   };
 

@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { keyframes, styled } from "styled-components";
 import {deleteInfoPost} from "../api/api2";
-import {useNavigate} from "react-router-dom";
 import {BsPencilSquare} from "react-icons/bs";
 import { RiAlarmWarningLine } from "react-icons/ri";
 import {TiDelete} from "react-icons/ti";
+import { useNavigate } from "react-router-dom";
 
 export default function InfoRead({ data }) {
-    
+    const navigator = useNavigate();
     const [tempChecked, setTempCheck] = useState(false);
     const [tempChange , setTempChange] = useState(false);
 
@@ -15,12 +15,13 @@ export default function InfoRead({ data }) {
     const deletehandle = async () => {
         console.log(data.id)
         try{deleteInfoPost(data.id);
-        
+            
         }
         catch(err){
             console.error(err);
            
         }
+        navigator(0)
     }
     // 수정 
     const updateDate = (e) =>{

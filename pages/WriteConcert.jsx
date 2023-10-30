@@ -5,6 +5,7 @@ import { styled } from "styled-components";
 import { BsFillPlusCircleFill } from "react-icons/bs";
 import { AiOutlineMinusSquare } from "react-icons/ai";
 import {writeInfoPost} from "../api/api2"
+import { useNavigate } from "react-router-dom";
 
 
 const genretal = ["선택해주세요" ,"Concert", "Musical" , "Orchestra" , "Festival" , "Others"] 
@@ -32,7 +33,7 @@ const WriteConcert = () => {
   const [content, setContent] = useState("");
   // 링크 
   const [link, setLink] = useState("");
-
+  const navigator = useNavigate();
   
   
 
@@ -110,6 +111,7 @@ const WriteConcert = () => {
       console.error(err);
     }
     } 
+    navigator(0)
 
   }
 
