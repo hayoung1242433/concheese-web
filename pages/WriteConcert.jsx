@@ -5,6 +5,7 @@ import { styled } from "styled-components";
 import { BsFillPlusCircleFill } from "react-icons/bs";
 import { AiOutlineMinusSquare } from "react-icons/ai";
 import {writeInfoPost} from "../api/api2"
+import { useNavigate } from "react-router-dom";
 
 
 const genretal = ["선택해주세요" ,"Concert", "Musical" , "Orchestra" , "Festival" , "Others"] 
@@ -32,7 +33,7 @@ const WriteConcert = () => {
   const [content, setContent] = useState("");
   // 링크 
   const [link, setLink] = useState("");
-
+  const navigator = useNavigate();
   
   
 
@@ -65,33 +66,20 @@ const WriteConcert = () => {
     const dates2 = dates.map((date) => {return (date === "") ? date = "정보없음" : date }  ) 
     let [a , b ,c , d , e , f , g , h] = dates2;
 
-
-  
-    const y = new Date(a + " " + b);
-    const x = new Date(c + " " + d);
-    const z = new Date(e + " " + f);
-    const i = new Date(g + " " + h);
-
-    const schedule2 = schedule.map((data) => { 
-      let a = new Date(data.timestamp)
-      return {...data , timestamp : a } // id : 숫자 , postal : 12343  , concert_id : 13425 // concert :{13425}
-    })
-    
-    console.log(schedule2)
     
     
     
     const form = {
       title : title , 
       performers  : playerList , 
-      genre : selectedGenre , 
-      schedule : schedule2 ,
-      ticketing : [
-        {start : y ,
-        end : x  ,
+      type : selectedGenre , 
+      schedules : schedule ,
+      ticketings : [
+        {start : a +" "+b + ":00",
+        end : c+" "+d + ":00" ,
         status : "PRE_SALE"} ,
-        {start : z ,
-         end : i ,
+        {start :e+ " "+ f + ":00" ,
+         end : g + " " + h + ":00",
          status : "GENERAL_SALE"
         }
       ], 
@@ -101,7 +89,7 @@ const WriteConcert = () => {
 
    console.log(form)
    //비동기 문제가 있음으로 그냥 form을 이용해서 값을 넣는다 
-  getPosts(form);
+   getPosts(form);
    // 다시 시작 
 
   }
@@ -123,6 +111,7 @@ const WriteConcert = () => {
       console.error(err);
     }
     } 
+    navigator(0)
 
   }
 
@@ -151,12 +140,12 @@ const WriteConcert = () => {
 
   // 장소 
   const addPlaceHandler = (e) => {
-    const previousdate = performancedate + " " + perstart
+    const previousdate = performancedate + " " + perstart + ":00"
     new daum.Postcode({
       oncomplete: function (data) {
         // 날짜당
         const code = parseInt(data.zonecode)
-        setSchedule( [...schedule , {timestamp : previousdate , postal : code} ])
+        setSchedule( [...schedule , {dateTime : previousdate , postalCode : code} ])
       },
     }).open();
     setPerformanceDate("");
@@ -166,7 +155,7 @@ const WriteConcert = () => {
   const subPlaceHandler = (e) => {
     
     const data2 = schedule.filter((sch) => {
-      return sch.postal !== e
+      return sch.postalCode !== e
     
     });
     setSchedule(data2);
@@ -175,22 +164,25 @@ const WriteConcert = () => {
   //공연자 
   const addPlayerHandler = (e) => {
     e.preventDefault();
-    setPlayerList([...playerList, player]);
+    const p = {name : player}
+    setPlayerList([...playerList, p]);
     setPlayer("");
     
   };
 
   const playerRender = () =>{
+    
    return  (playerList
       .filter((v) => {
-        return v.length > 0;
+        return v.name.length > 0;
       })
       .map((data) => { 
-        return <Tag onClick = {() => {playerDelete(data)}}>{data} x </Tag>;
+        console.log(data.name)
+        return <Tag onClick = {() => {playerDelete(data.name)}}>{data.name} x </Tag>;
       }))   }
   
   const playerDelete = (value) =>{
-      const playerlist = playerList.filter((player) => { return player !== value })
+      const playerlist = playerList.filter((player) => { return player.name !== value })
       setPlayerList(playerlist);
   }
   
@@ -299,7 +291,7 @@ const WriteConcert = () => {
           
           </div> : <p style = {{fontSize : "10px" ,color : "grey" , margin : "5px"}}> 공연 날짜와 시작시간을 입력해 주세요 </p> }
           {schedule.map((v) => {
-              return  <div key={v.postal} >{v.timestamp} / {v.postal} <AiOutlineMinusSquare onClick = {() => {subPlaceHandler(v.postal)}}/> </div>;
+              return  <div key={v.datetime} >{v.dateTime} / {v.postalCode} <AiOutlineMinusSquare onClick = {() => {subPlaceHandler(v.postalCode)}}/> </div>;
             })}
 
           
@@ -371,37 +363,4 @@ const Datey = styled.input`
 export default WriteConcert;
 
 
- // 날짜 렌더(중간발표 이후 )
-  /*
-
-  // 날짜
-  const rightDate = () =>{
-    if(dateRightTime.length !== 0 && dateTime.length !== 0){
-    setTimeList((prev) => {return [...prev , [dateTime,  dateRightTime] ]}) 
-    setDateTimeList("");
-    setDateRightTime("");
-  }
-    else {
-      alert("날짜와 해당 날짜의 시간을 둘 다 입력해 주세요 ")
-    }
-  }
- // 날짜2 삭제
- const deleteTime2 = (e) => {
-   const v = e.target.value;
-   console.log(v);
-  
-   const a = timeList.filter((times) => {
-      return (times[0] === v)
-   })
-   setTimeList(a);
- }
- // 날짜 render 
- const dateRender = () =>{
-  return( timeList.map((times) => times.reduce((time , currentTime) => 
-    {return <Tag style ={{margin : "8px"}}
-    value = {time}
-    onClick = {deleteTime2}
-    > 
-    {time} / {currentTime} x </Tag>} ) ))
- } */ 
  

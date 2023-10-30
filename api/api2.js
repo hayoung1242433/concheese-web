@@ -1,7 +1,8 @@
+const EndPoint = `https://concheese.net/api/v1/info/concert`
 
 export async function getInfoPosts() {
     const response = await fetch(
-      "http://swacademy.null0xff.com:8080/api/v1/concert/infoList"
+       EndPoint + `/list`
     );
   
     if (!response.ok) {
@@ -13,29 +14,32 @@ export async function getInfoPosts() {
     return body;
   }
 
- //  3) 과제 수행을 위해 건드림 
-export async function getInfoPosts2(id) {
-  const response = await fetch( 
-    `http://swacademy.null0xff.com:8080/api/v1/concert/info${id}`
-  )
-  if(!response.ok) { 
-    throw new Error("getPost2에 문제가 생김!")
+ // filter하기 
+ export async function getInfoFilter(id , index) {
+  
+  const response = await fetch(EndPoint + `/list?${index}=${id}`)
+  if(!response.ok){
+    throw new Error("filter에 문제가 생김")
+    
   }
   const body = await response.json();
   console.log("body : " , body);
   return body;
-}
+ }
+ 
+
   
   export async function writeInfoPost(formData) {
     console.log(formData);
-    
-    
     const response = await fetch(
-      "http://swacademy.null0xff.com:8080/api/v1/concert/info",
+      EndPoint + "/register",
+     
       {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-type" : "application/json",
+
+
         },
         body: JSON.stringify(formData),
       }
@@ -50,8 +54,8 @@ export async function getInfoPosts2(id) {
     return body;
   }
   
-  export async function updateInfoPost(id, formData) {
-    const url = `http://swacademy.null0xff.com:8080/api/v1/concert/info/${id}`;
+  export async function updateInfoPost(formData ) {
+    const url = EndPoint + `/update`;
     const response = await fetch(url, {
       method: "PUT",
       headers: {
@@ -70,8 +74,9 @@ export async function getInfoPosts2(id) {
   }
   
   export async function deleteInfoPost(id) {
+    console.log(EndPoint + `/delete/${id}`)
     const response = await fetch(
-      EndPoint + `http://swacademy.null0xff.com:8080/api/v1/concert/info/${id}`,
+      EndPoint + `/delete/${id}`,
       {
         method: "DELETE",
       }

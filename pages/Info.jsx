@@ -5,60 +5,53 @@ import { AiOutlineHeart } from "react-icons/ai";
 import { useState , useEffect } from 'react';
 import { AiFillCheckCircle } from "react-icons/ai"
 import { getInfoPosts } from "../api/api2"
-import InfoRead from "../components/infoRead";
-import HomeData from "../mock/home_data.json";
+import Infos from "../components/Infos";
 
 
 export default function Info() {
   const [artist, setArtist] = useState("");
   const [artistList, setArtistList] = useState([]);
-  const [form, setForm] = useState(HomeData);
+  const [form, setForm] = useState([]);
   
   const a = useLocation()
 
-  
+  // 바로 받았을 때 게시판 하나만 표시 
   useEffect(() => {
-    checking()
+    getPosts();
   } , [])
-  const checking = () =>{
-    if(a.state === null){
-      console.log(a);
-      // getPost가 들어갈 자리 
+
+  const checking = async (result) =>{
+    console.log(a);
+    if(a.state === null ){
+      setForm(result)
     }
     else{
-     const tempFilter =  HomeData.filter((ie) => (ie.title === a.state.id ))
-     setForm(tempFilter);
-      // getPost2가 들어갈 자리 
+      const tempFilter = result.filter((ie) => (ie.id === a.state.id))
+      setForm(tempFilter)
     }
+   
+    } 
+  
     
     
-  }
+  
   // 값을 받기 
-  /*
-  useEffect( () => {
-    getPosts(); 
-
-   } , []);
+  
+  
   const getPosts = async () => {
-    try{
-      
-      const result = await getInfoPosts();
-      setForm(result)
+    try {
+     const result = await getInfoPosts();
+     checking(result)
+     //setForm(result);
+    } catch (err) {
+      console.error(err);
     }
-    catch(err){
-      console.log(err);
-    }
+    
+    
+ 
+  };
 
-  const getPosts2 async (id) => {
-    try{
-      const result = await getInfoPosts(id);
-      setForm(result)
-    }
-    catch(err){
-      console.log(err);
-    }
-  }
-  }*/
+  
 
 
 
@@ -94,13 +87,18 @@ export default function Info() {
   const makeForm = () => {
     
     let test1 = form;
+  
     if (artistList.length !== 0) {
-      test1 = artistList.map((data) => { return form.filter(datas => datas.player.includes(data)) }).flat()
+      test1 = artistList.map((data) => { return form.filter(datas =>{
+       let l = datas.performers.findIndex((d) => {return d.name === data })
+      return (l !== -1 ) ? datas  : console.log("출력 성공")
+      
+      }) }).flat()
     }
 
     return (
       <>
-        {test1.map((data, i) => <InfoRead key={i} data={data} />)}
+        {test1.map((data, i) => <Infos key={i} data={data} />)}
       </>
     )
   }
@@ -234,4 +232,4 @@ const Tag = styled.span`
   border-radius: 10px;
   font-size: 12px;
   cursor: pointer;
-`;
+`

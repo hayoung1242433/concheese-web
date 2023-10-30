@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { HiDotsVertical } from "react-icons/hi";
 import styled from "styled-components";
 import { deletePost, updatePost } from "../api/api";
-import profile from "../assets/profile.jpg";
 import { useNavigate } from "react-router-dom";
 
 export default function FreeCard({ id, date, content, username }) {
@@ -15,7 +14,7 @@ export default function FreeCard({ id, date, content, username }) {
   const [canEdit, setCanEdit] = useState(false);
   const [canUpdate, setCanUpdate] = useState(false);
   const [newContent, setNewContent] = useState(content);
-  const [commentTrue , setComment] = useState(false);
+  
   
   // 옆 창에 보내기 연습 
 
@@ -64,15 +63,7 @@ export default function FreeCard({ id, date, content, username }) {
         }}
       >
         <ProfileCover>
-          <img
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              borderRadius: "50%",
-            }}
-            src={profile}
-          />
+        
         </ProfileCover>
         <div>
           <p style={{ fontSize: "18px", fontWeight: "bold" }}>{username}</p>
@@ -155,6 +146,8 @@ const ProfileCover = styled.div`
   justify-content: center;
   border-radius: 50%;
 `;
+
+
 
 const IconWrap = styled.span`
   flex-grow: 1;
