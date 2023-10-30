@@ -31,14 +31,29 @@ jobs:
           name: build
           path: dist/
 
+      - name: Install SSH key
+        env:
+          SSH_KEY: ${{secrets.SSH_KEY}}
+        run: |
+          echo "$SSH_KEY" > deploy_key
+          chmod 600 deploy_key
+
+      - name: Clear Remote Directory
+        env:
+          SSH_HOST: ${{secrets.SSH_HOST}}
+          SSH_PORT: ${{secrets.SSH_PORT}}
+          SSH_USER: ${{secrets.SSH_USER}}
+        run: |
+          ssh -p $SSH_PORT -i deploy_key -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "rm -rf /opt/concheese/*"
+
       - name: Deploy to Linux server
         env:
           SSH_HOST: ${{secrets.SSH_HOST}}
           SSH_PORT: ${{secrets.SSH_PORT}}
           SSH_USER: ${{secrets.SSH_USER}}
-          SSH_KEY: ${{secrets.SSH_KEY}}
         run: |
-          echo "$SSH_KEY" > deploy_key
-          chmod 600 deploy_key
-          rsync -avz -e "ssh -p $SSH_PORT -i deploy_key -o StrictHostKeyChecking=no" --delete ./dist/ $SSH_USER@$SSH_HOST:/opt/concheese
+          scp -P $SSH_PORT -i deploy_key -o StrictHostKeyChecking=no -r ./dist/* $SSH_USER@$SSH_HOST:/opt/concheese/
+
+      - name: Cleanup SSH key
+        run: |
           rm -f deploy_key
