@@ -65,33 +65,20 @@ const WriteConcert = () => {
     const dates2 = dates.map((date) => {return (date === "") ? date = "정보없음" : date }  ) 
     let [a , b ,c , d , e , f , g , h] = dates2;
 
-
-  
-    const y = new Date(a + " " + b);
-    const x = new Date(c + " " + d);
-    const z = new Date(e + " " + f);
-    const i = new Date(g + " " + h);
-
-    const schedule2 = schedule.map((data) => { 
-      let a = new Date(data.timestamp)
-      return {...data , timestamp : a } // id : 숫자 , postal : 12343  , concert_id : 13425 // concert :{13425}
-    })
-    
-    console.log(schedule2)
     
     
     
     const form = {
       title : title , 
       performers  : playerList , 
-      genre : selectedGenre , 
-      schedule : schedule2 ,
+      type : selectedGenre , 
+      schedules : schedule ,
       ticketing : [
-        {start : y ,
-        end : x  ,
+        {start : a +"T"+b ,
+        end : c+"T"+d  ,
         status : "PRE_SALE"} ,
-        {start : z ,
-         end : i ,
+        {start :e+ "T"+ f ,
+         end : g + "T" + h,
          status : "GENERAL_SALE"
         }
       ], 
@@ -151,12 +138,12 @@ const WriteConcert = () => {
 
   // 장소 
   const addPlaceHandler = (e) => {
-    const previousdate = performancedate + " " + perstart
+    const previousdate = performancedate + "T" + perstart 
     new daum.Postcode({
       oncomplete: function (data) {
         // 날짜당
         const code = parseInt(data.zonecode)
-        setSchedule( [...schedule , {timestamp : previousdate , postal : code} ])
+        setSchedule( [...schedule , {datetime : previousdate , postalCode : code} ])
       },
     }).open();
     setPerformanceDate("");
@@ -175,22 +162,25 @@ const WriteConcert = () => {
   //공연자 
   const addPlayerHandler = (e) => {
     e.preventDefault();
-    setPlayerList([...playerList, player]);
+    const p = {name : player}
+    setPlayerList([...playerList, p]);
     setPlayer("");
     
   };
 
   const playerRender = () =>{
+    
    return  (playerList
       .filter((v) => {
-        return v.length > 0;
+        return v.name.length > 0;
       })
       .map((data) => { 
-        return <Tag onClick = {() => {playerDelete(data)}}>{data} x </Tag>;
+        console.log(data.name)
+        return <Tag onClick = {() => {playerDelete(data.name)}}>{data.name} x </Tag>;
       }))   }
   
   const playerDelete = (value) =>{
-      const playerlist = playerList.filter((player) => { return player !== value })
+      const playerlist = playerList.filter((player) => { return player.name !== value })
       setPlayerList(playerlist);
   }
   
@@ -299,7 +289,7 @@ const WriteConcert = () => {
           
           </div> : <p style = {{fontSize : "10px" ,color : "grey" , margin : "5px"}}> 공연 날짜와 시작시간을 입력해 주세요 </p> }
           {schedule.map((v) => {
-              return  <div key={v.postal} >{v.timestamp} / {v.postal} <AiOutlineMinusSquare onClick = {() => {subPlaceHandler(v.postal)}}/> </div>;
+              return  <div key={v.datetime} >{v.datetime} / {v.postalCode} <AiOutlineMinusSquare onClick = {() => {subPlaceHandler(v.postalCode)}}/> </div>;
             })}
 
           
@@ -371,37 +361,4 @@ const Datey = styled.input`
 export default WriteConcert;
 
 
- // 날짜 렌더(중간발표 이후 )
-  /*
-
-  // 날짜
-  const rightDate = () =>{
-    if(dateRightTime.length !== 0 && dateTime.length !== 0){
-    setTimeList((prev) => {return [...prev , [dateTime,  dateRightTime] ]}) 
-    setDateTimeList("");
-    setDateRightTime("");
-  }
-    else {
-      alert("날짜와 해당 날짜의 시간을 둘 다 입력해 주세요 ")
-    }
-  }
- // 날짜2 삭제
- const deleteTime2 = (e) => {
-   const v = e.target.value;
-   console.log(v);
-  
-   const a = timeList.filter((times) => {
-      return (times[0] === v)
-   })
-   setTimeList(a);
- }
- // 날짜 render 
- const dateRender = () =>{
-  return( timeList.map((times) => times.reduce((time , currentTime) => 
-    {return <Tag style ={{margin : "8px"}}
-    value = {time}
-    onClick = {deleteTime2}
-    > 
-    {time} / {currentTime} x </Tag>} ) ))
- } */ 
  

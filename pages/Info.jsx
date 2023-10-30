@@ -16,17 +16,17 @@ export default function Info() {
   
   const a = useLocation()
 
-  
+  // 바로 받았을 때 게시판 하나만 표시 
   useEffect(() => {
     checking()
   } , [])
   const checking = () =>{
     if(a.state === null){
       console.log(a);
-      // getPost가 들어갈 자리 
+     
     }
     else{
-     const tempFilter =  HomeData.filter((ie) => (ie.title === a.state.id ))
+     const tempFilter =  HomeData.filter((ie) => (ie.id === a.state.id ))
      setForm(tempFilter);
       // getPost2가 들어갈 자리 
     }
@@ -94,8 +94,13 @@ export default function Info() {
   const makeForm = () => {
     
     let test1 = form;
+  
     if (artistList.length !== 0) {
-      test1 = artistList.map((data) => { return form.filter(datas => datas.player.includes(data)) }).flat()
+      test1 = artistList.map((data) => { return form.filter(datas =>{
+       let l = datas.performers.findIndex((d) => {return d.name === data })
+      return (l !== -1 ) ? datas  : console.log("출력 성공")
+      
+      }) }).flat()
     }
 
     return (

@@ -5,6 +5,10 @@ export default function App({ children }) {
     <>
       <Nav />
       <div>{children}</div>
+      
     </>
   );
 }
+
+//firebase
+  
