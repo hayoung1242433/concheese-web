@@ -73,12 +73,12 @@ const WriteConcert = () => {
       performers  : playerList , 
       type : selectedGenre , 
       schedules : schedule ,
-      ticketing : [
-        {start : a +"T"+b ,
-        end : c+"T"+d  ,
+      ticketings : [
+        {start : a +" "+b + ":00",
+        end : c+" "+d + ":00" ,
         status : "PRE_SALE"} ,
-        {start :e+ "T"+ f ,
-         end : g + "T" + h,
+        {start :e+ " "+ f + ":00" ,
+         end : g + " " + h + ":00",
          status : "GENERAL_SALE"
         }
       ], 
@@ -88,7 +88,7 @@ const WriteConcert = () => {
 
    console.log(form)
    //비동기 문제가 있음으로 그냥 form을 이용해서 값을 넣는다 
-  getPosts(form);
+   getPosts(form);
    // 다시 시작 
 
   }
@@ -138,12 +138,12 @@ const WriteConcert = () => {
 
   // 장소 
   const addPlaceHandler = (e) => {
-    const previousdate = performancedate + "T" + perstart 
+    const previousdate = performancedate + " " + perstart + ":00"
     new daum.Postcode({
       oncomplete: function (data) {
         // 날짜당
         const code = parseInt(data.zonecode)
-        setSchedule( [...schedule , {datetime : previousdate , postalCode : code} ])
+        setSchedule( [...schedule , {dateTime : previousdate , postalCode : code} ])
       },
     }).open();
     setPerformanceDate("");
@@ -153,7 +153,7 @@ const WriteConcert = () => {
   const subPlaceHandler = (e) => {
     
     const data2 = schedule.filter((sch) => {
-      return sch.postal !== e
+      return sch.postalCode !== e
     
     });
     setSchedule(data2);
@@ -289,7 +289,7 @@ const WriteConcert = () => {
           
           </div> : <p style = {{fontSize : "10px" ,color : "grey" , margin : "5px"}}> 공연 날짜와 시작시간을 입력해 주세요 </p> }
           {schedule.map((v) => {
-              return  <div key={v.datetime} >{v.datetime} / {v.postalCode} <AiOutlineMinusSquare onClick = {() => {subPlaceHandler(v.postalCode)}}/> </div>;
+              return  <div key={v.datetime} >{v.dateTime} / {v.postalCode} <AiOutlineMinusSquare onClick = {() => {subPlaceHandler(v.postalCode)}}/> </div>;
             })}
 
           

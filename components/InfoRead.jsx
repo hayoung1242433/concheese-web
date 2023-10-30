@@ -13,6 +13,7 @@ export default function InfoRead({ data }) {
 
     // 삭제
     const deletehandle = async () => {
+        console.log(data.id)
         try{deleteInfoPost(data.id);
         
         }

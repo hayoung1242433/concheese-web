@@ -18,47 +18,39 @@ export default function Info() {
 
   // 바로 받았을 때 게시판 하나만 표시 
   useEffect(() => {
+    getPosts();
     checking()
   } , [])
+
   const checking = () =>{
     if(a.state === null){
-      console.log(a);
+      console.log(a)
      
     }
     else{
-     const tempFilter =  HomeData.filter((ie) => (ie.id === a.state.id ))
+    const temp = form; 
+     const tempFilter =  temp.filter((ie) => (ie.id === a.state.id ))
      setForm(tempFilter);
-      // getPost2가 들어갈 자리 
-    }
-    
-    
+    } 
   }
+    
+    
+  
   // 값을 받기 
-  /*
-  useEffect( () => {
-    getPosts(); 
-
-   } , []);
+  
+  
   const getPosts = async () => {
-    try{
-      
-      const result = await getInfoPosts();
-      setForm(result)
+    try {
+     const result = await getInfoPosts();
+      console.log(result)
+     setForm(result);
+    } catch (err) {
+      console.error(err);
     }
-    catch(err){
-      console.log(err);
-    }
+ 
+  };
 
-  const getPosts2 async (id) => {
-    try{
-      const result = await getInfoPosts(id);
-      setForm(result)
-    }
-    catch(err){
-      console.log(err);
-    }
-  }
-  }*/
+  
 
 
 
@@ -239,4 +231,4 @@ const Tag = styled.span`
   border-radius: 10px;
   font-size: 12px;
   cursor: pointer;
-`;
+`

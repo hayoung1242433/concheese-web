@@ -74,8 +74,9 @@ export async function getInfoPosts() {
   }
   
   export async function deleteInfoPost(id) {
+    console.log(EndPoint + `/delete/${id}`)
     const response = await fetch(
-      EndPoint + `/${id}`,
+      EndPoint + `/delete/${id}`,
       {
         method: "DELETE",
       }

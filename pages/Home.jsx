@@ -39,7 +39,7 @@ const Home = () => {
   };
 
   useEffect(() => {
-   //InfoPosts();
+   InfoPosts();
    makealign();
   }, []);
 
@@ -121,48 +121,65 @@ const Home = () => {
     });
   };
 
+  const playerDelete = (v) => {
+    setPlayerList(
+      playerList.filter((data) => {
+        return data !== v;
+      })
+    );
+  };
+
+
   //filter 
   const infoFilter =async  (a , b ) => {
     try {
       const result = await getInfoFilter( a , b );
        console.log(result)
-      setForm(result);
+       return result;
      } catch (err) {
        console.error(err);
      }
-  
+  }
 
-
+  const infoCheck = async (a) => {
+    let b = a;
+    if(array2.includes(a)){
+       b = array2.filter(d => d === a)
+      return  infoFilter(b , "title")
+    } 
+    else if (array3.includes(a) ) {
+      b = array3.filter(d => d === a)
+     return infoFilter(b , "performer")
+    }
+    
+   
   }
   const cardRender = () => {
     console.log(playerList);
     let test = form;
-    // 공연자, 공연 이름 filter 
-    let test2 =test
-    let test3 = test
+    let test2 =form;
+    let test3 = form;
+    
+     // 공연자, 공연 이름 filter 
     if (playerList.length !== 0) {
 
-     test2 = playerList
-        .map((data) => {
-        (array2.includes(data)) ?  infoFilter(data , "title" ) : infoFilter(data , "performer") } )
-        .flat();
-      
-      /*
-      let a = " "
-      playerList.map((data) => a += "/" +data )
-      const form = 함수 이용해서 get 요청 보내기*/
-     
-     test3 = test2.filter((data , index ) => 
-     { let a = test2.findIndex((data2) => {return (data.description === data2.description ) && (data.title === data2.title) } )
-      return index === a })
+     test = playerList
+        .map((data) => { 
+         let tempData =  (data.slice(0,1) === "-") ? infoFilter(data.slice(1, data.length) , "performer") : infoCheck(data)
+         return tempData 
+        }  ) 
+    // 중복 필터 
+    test2 = test.filter((t) => { let d = test.findIndex((i) => { return (d.title === i.title && d.description === i.description )} )
+       return (d === -1) ? t : console.log("") 
+  })
+    } 
    
    // 날짜 필터 
     if (datefilter.length !== 0 && date.length !== 0) {
-      console.log(datefilter)
       
       switch (date) {
         case "선예매":
-          test = form.filter((data) => {
+          test3 = test2.filter((data) => {
             console.log(data.ticketings[0].start.slice(0,7))
             return (
               data.ticketings[0].start.slice(0,7) ===
@@ -171,7 +188,7 @@ const Home = () => {
           });
           break;
         case "티켓팅 날짜":
-          test = form.filter((data) => {
+          test3 = test2.filter((data) => {
             return (
              data.ticketings[1].start.slice(0,7) ===
               datefilter
@@ -179,7 +196,7 @@ const Home = () => {
           });
           break;
         case "공연 날짜":
-          test = form
+          test3 = test2
           .filter((data) => {
               let a = data.schedules.findIndex((data2) => (
                 data2.timestamp.slice(0, 7) === datefilter ))
@@ -188,7 +205,7 @@ const Home = () => {
             );
           break;
       }
-    }
+    
     
     
 
@@ -196,7 +213,7 @@ const Home = () => {
     
     }
 
-    return test.map((data) => {
+    return test3.map((data) => {
       return (
         <L_col>
           <Mold>
@@ -207,14 +224,7 @@ const Home = () => {
     });
   };
 
-  const playerDelete = (v) => {
-    setPlayerList(
-      playerList.filter((data) => {
-        return data !== v;
-      })
-    );
-  };
-
+  
   const setallDate = () => {
     return (
       <div style={{ display: "flex" }}>
