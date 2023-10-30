@@ -19,6 +19,7 @@ module.exports = {
     hot: true,
     liveReload: true,
     historyApiFallback: true,
+    allowedHosts: ["concheese.net", "localhost:5500"],
   },
   resolve: {
     extensions: [".js", ".jsx", ".json"],
