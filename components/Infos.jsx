@@ -43,9 +43,10 @@ export default function Infos({ data }) {
     // setReturn
     const setReturn = (e) => {
         const [a,b , c, d, y, f ,g , h ,x , z ,w ,q , m] = totalDate
-        const data2 = {...data , ticketings : [{start : a+ " " + b , end : c + " " + d , status : "PRE_SALE"} , 
-        {start : y+ " " + f , end : g + " " + h , status : "GENERAL_SALE"}]  , schedules : [{dateTime : x + " " + z  , postalCode : parseInt(w) }] , 
+        const data2 = {...data , ticketings : [{ id : data.ticketings[0].id , start : a+ " " + b + ":00" , end : c + " " + d + ":00" , status : "PRE_SALE"} , 
+        { id : data.ticketings[1].id , start : y+ " " + f + ":00" , end : g + " " + h + ":00" , status : "PRE_SALE"}   ]  , schedules : [{ id : data.schedules[0].id , dateTime : x + " " + z + ":00" , postalCode : parseInt(w) }] , 
          description : q , link : m }
+         console.log(JSON.stringify(data2) )
          updatePost(data2)
     }
 
@@ -70,8 +71,8 @@ export default function Infos({ data }) {
                 <P2> {data.ticketings[0].start.slice(0,16)} </P2>
                 <P2>{data.ticketings[0].end.slice(0,16)}</P2>
                 <P>티켓팅 날짜 </P>
-                <P2> {data.ticketings[1].start.slice(0,16)} </P2>
-                <P2>{data.ticketings[1].end.slice(0,16)}</P2>
+                <P2> { (data.ticketings.length > 1 ) ? data.ticketings[1].start.slice(0,16) : <P2>해당 없음 </P2>} </P2>
+                <P2>{(data.ticketings.length > 1 ) ? data.ticketings[1].end.slice(0,16) : <P2>해당 없음 </P2> }</P2>
                 <P> [장소] 공연 날짜  </P>
                 {data.schedules.map((d) => {
                     return <P2> [{d.postalCode}] {d.dateTime.slice(0, 10 )}  </P2>
@@ -100,7 +101,7 @@ export default function Infos({ data }) {
                 <P>공연 날짜 </P>
                 <p style ={{ fontSize : "10px"}}>
                 start : <Datey id = "8" type = "date" onChange = {updateDate} /> <Datey id ="9" type = "time" style = {{ margin : "5px"}} onChange ={updateDate} />  <br/>
-                postal : <Datey id = "10"   style = {{margin : "3px" }} onChange = {updateDate} />  </p>
+                postal(우편번호) : <Datey id = "10"   style = {{margin : "3px" }} onChange = {updateDate} />  </p>
                  <p style = {{ display : "flex"}}>
                 <P>내용</P> 
                 <input id = "11" style ={{backgroundColor : "white" , border : "none"}} onChange = {updateDate}/> 
