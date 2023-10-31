@@ -2,9 +2,20 @@ import Wrapper from "../layout/Wrapper";
 import logo from "../assets/logo-second.png";
 import styled from "styled-components";
 import { Link, useLocation } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 const Nav = () => {
   const { pathname } = useLocation();
+
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get("jwt");
+  console.log("jwt:", token);
+  if (token) {
+    console.log(token);
+  } else {
+    console.log("No jwt parameter found");
+  }
+
   return (
     <Navbar>
       <Wrapper>
@@ -29,28 +40,29 @@ const Nav = () => {
           </NavList>
 
           <LogInBtn>
-            <Link
-              style={{
-                display: "block",
-                padding: "10px 20px",
-                backgroundColor: "black",
-                border: "none",
-                color : "white",
-                borderRadius : "8px"
-                
-              }}
-              to={{ pathname: "/login" }}
-              onMouseEnter = {(e) => {
-                e.target.style.backgroundColor = "#f49c5d";
-               
-              }}
-              onMouseLeave = {(e) =>{
-                e.target.style.backgroundColor = "black";
-              
-              }}
-            >
-              로그인
-            </Link>
+            {token === null ? (
+              <Link
+                style={{
+                  display: "block",
+                  padding: "10px 20px",
+                  backgroundColor: "black",
+                  border: "none",
+                  color: "white",
+                  borderRadius: "8px",
+                }}
+                to={{ pathname: "/login" }}
+                onMouseEnter={(e) => {
+                  e.target.style.backgroundColor = "#f49c5d";
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = "black";
+                }}
+              >
+                로그인
+              </Link>
+            ) : (
+              <p>로그인 완료</p>
+            )}
           </LogInBtn>
         </NavContents>
       </Wrapper>
@@ -59,7 +71,7 @@ const Nav = () => {
 };
 
 const Navbar = styled.nav`
-  background-color : white;
+  background-color: white;
 `;
 
 const NavList = styled.ul`
@@ -77,11 +89,10 @@ const NavContents = styled.div`
 `;
 
 const NavItem = styled.li`
-  color : ${(props) => (props.p === "true" ? "#f49c5d" : "black")};
-  &:hover { border-top: 3px solid #f49c5d;
+  color: ${(props) => (props.p === "true" ? "#f49c5d" : "black")};
+  &:hover {
+    border-top: 3px solid #f49c5d;
   }
-
-  
 `;
 // border: 1px solid #f49c5d;
 

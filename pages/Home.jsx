@@ -8,17 +8,8 @@ import { BsCalendarCheck } from "react-icons/bs";
 import { AiFillCheckCircle } from "react-icons/ai";
 import { AiOutlineSearch } from "react-icons/ai";
 import HomeCard from "../components/HomeCard";
-import { useParams } from "react-router-dom";
 
 const Home = () => {
-  let { jwt } = useParams();
-  console.log("jwt:", jwt);
-  if (jwt) {
-    console.log(jwt);
-  } else {
-    console.log("No jwt parameter found");
-  }
-
   const [date, setDate] = useState("");
   const [datefilter, setDateFilter] = useState("");
   const [checkdate, setCheckDate] = useState(false);
