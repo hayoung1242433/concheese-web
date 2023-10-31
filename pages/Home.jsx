@@ -2,128 +2,111 @@ import { keyframes, styled } from "styled-components";
 import Contents from "../layout/Contents";
 import Wrapper from "../layout/Wrapper";
 import { useEffect, useState } from "react";
-import { getInfoPosts , getInfoFilter} from "../api/api2";
+import { getInfoPosts, getInfoFilter } from "../api/api2";
 // react-icons 모음
 import { BsCalendarCheck } from "react-icons/bs";
 import { AiFillCheckCircle } from "react-icons/ai";
-import {AiOutlineSearch} from "react-icons/ai";
+import { AiOutlineSearch } from "react-icons/ai";
 import HomeCard from "../components/HomeCard";
-
-
-
+import { useParams } from "react-router-dom";
 
 const Home = () => {
-  
+  let { jwt } = useParams();
+  console.log("jwt:", jwt);
+  if (jwt) {
+    console.log(jwt);
+  } else {
+    console.log("No jwt parameter found");
+  }
+
   const [date, setDate] = useState("");
   const [datefilter, setDateFilter] = useState("");
   const [checkdate, setCheckDate] = useState(false);
   const [form, setForm] = useState([]);
-  // 자동 완성 검색어 
-  const [array , setArray ] = useState([]);
-  const [array2 , setArray2] = useState([]);
-  const [array3 , setArray3] = useState([]);
-  const [autoComplete , setAutoComplete] = useState(false);
-  // 값을 전달 할 때 
-  const [titley , setTitle] = useState([])
-  const [performersy , setPerformers] = useState([])
-  const [totalList , setTotalList] = useState([])
-  const [temple , setTemple] = useState("")
-  const [checkWhich , setCheckWhich] = useState("")
-  
+  // 자동 완성 검색어
+  const [array, setArray] = useState([]);
+  const [array2, setArray2] = useState([]);
+  const [array3, setArray3] = useState([]);
+  const [autoComplete, setAutoComplete] = useState(false);
+  // 값을 전달 할 때
+  const [titley, setTitle] = useState([]);
+  const [performersy, setPerformers] = useState([]);
+  const [totalList, setTotalList] = useState([]);
+  const [temple, setTemple] = useState("");
+  const [checkWhich, setCheckWhich] = useState("");
 
   useEffect(() => {
-   InfoPosts();
-   
+    InfoPosts();
   }, []);
-  
-  // 값을 받기 
+
+  // 값을 받기
   const InfoPosts = async () => {
     try {
-     const result = await getInfoPosts();
-     
-      setForm(result)
-      makealign(result)
-     
+      const result = await getInfoPosts();
+
+      setForm(result);
+      makealign(result);
     } catch (err) {
       console.error(err);
     }
- 
   };
 
-  
-  //초기 자동완성 만들기  
+  //초기 자동완성 만들기
   const makealign = async (result) => {
-    
     const array = [];
     const array2 = [];
-    
-    
-    // form에 맞춰서 객체 정렬 
-    result.map((a) => { 
-      array.push(a.title)
+
+    // form에 맞춰서 객체 정렬
+    result.map((a) => {
+      array.push(a.title);
       a.performers.map((b) => {
-        array2.push(b.name)
-      })
-       
-          }
-    )
-    
-   const tempArray = [... new Set(array)];
-   const tempArray2 = [... new Set(array2)];
+        array2.push(b.name);
+      });
+    });
+
+    const tempArray = [...new Set(array)];
+    const tempArray2 = [...new Set(array2)];
 
     setForm(result);
     setArray(tempArray);
-    setArray2(tempArray2); 
+    setArray2(tempArray2);
     setArray3(tempArray);
-    
-  }
-  
-  // 값을 저장하고 일치하는 것 출력 
-  const autoFilter = (e) => {
-    console.log(checkWhich)
-    let fitty = array;
-    if(checkWhich === "제목"){
-      
-      fitty = array.filter((arr) => arr.includes(e.target.value))
-      
-    }
-    else if(checkWhich === "가수"){
-     
-      fitty = array2.filter((arr) => arr.includes(e.target.value))
-      
-    }
-    setTemple(e.target.value)
-    setArray3(fitty)
-    
-  }
+  };
 
-  
-  
+  // 값을 저장하고 일치하는 것 출력
+  const autoFilter = (e) => {
+    console.log(checkWhich);
+    let fitty = array;
+    if (checkWhich === "제목") {
+      fitty = array.filter((arr) => arr.includes(e.target.value));
+    } else if (checkWhich === "가수") {
+      fitty = array2.filter((arr) => arr.includes(e.target.value));
+    }
+    setTemple(e.target.value);
+    setArray3(fitty);
+  };
 
   const playerChange = (e) => {
     e.preventDefault();
     setAutoComplete(false);
-    
-    if (temple.length !== 0){
-      if(checkWhich === "가수"){
-        if(!performersy.includes(temple)){
-           setPerformers([...performersy , temple])
+
+    if (temple.length !== 0) {
+      if (checkWhich === "가수") {
+        if (!performersy.includes(temple)) {
+          setPerformers([...performersy, temple]);
         }
-      }
-      else if(checkWhich === "제목"){
-        if(!titley.includes(temple)){
-          setTitle([...titley , temple])
+      } else if (checkWhich === "제목") {
+        if (!titley.includes(temple)) {
+          setTitle([...titley, temple]);
         }
       }
 
-  
-    setTotalList([...totalList , temple])
-    setTemple("");}
+      setTotalList([...totalList, temple]);
+      setTemple("");
+    }
   };
 
   const playerRender = () => {
-    
-    
     return totalList.map((v) => {
       return (
         <Tag key={v} onClick={() => playerDelete(v)}>
@@ -143,91 +126,75 @@ const Home = () => {
       );
     });
   };
-  
+
   const playerDelete = (v) => {
     setTotalList(
-    totalList.filter((data) => {
+      totalList.filter((data) => {
         return data !== v;
       })
     );
   };
 
-  const getInfo = async () =>{
-    const result =  await getInfoFilter( p , "performer")
+  const getInfo = async () => {
+    const result = await getInfoFilter(p, "performer");
+  };
 
-  }
-
-  
-  const cardRender =  () => {
+  const cardRender = () => {
     let test = form;
-    let test2 =form;
+    let test2 = form;
     let test3 = form;
-    
-     // 공연자, 공연 이름 filter 
+
+    // 공연자, 공연 이름 filter
     if (performersy.length !== 0) {
-      test2 = performersy.map((p) => { return   getInfoFilter( p  , "performer")})
-    } 
-    else if(titley.length !== 0 ){
-      test2 = titley.map((t) => { return getInfoFilter(t , "title")})
+      test2 = performersy.map((p) => {
+        return getInfoFilter(p, "performer");
+      });
+    } else if (titley.length !== 0) {
+      test2 = titley.map((t) => {
+        return getInfoFilter(t, "title");
+      });
     }
 
-
-   
-   // 날짜 필터 
+    // 날짜 필터
     if (datefilter.length !== 0 && date.length !== 0) {
-      
       switch (date) {
         case "선예매":
           test3 = test2.filter((data) => {
-            console.log(data.ticketings[0].start.slice(0,7))
-            return (
-              data.ticketings[0].start.slice(0,7) ===
-              datefilter 
-            );
+            console.log(data.ticketings[0].start.slice(0, 7));
+            return data.ticketings[0].start.slice(0, 7) === datefilter;
           });
           break;
         case "티켓팅 날짜":
           test3 = test2.filter((data) => {
-            return (
-             data.ticketings[1].start.slice(0,7) ===
-              datefilter
-            );
+            return data.ticketings[1].start.slice(0, 7) === datefilter;
           });
           break;
         case "공연 날짜":
-          test3 = test2
-          .filter((data) => {
-              let a = data.schedules.findIndex((data2) => (
-                data2.timestamp.slice(0, 7) === datefilter ))
-             return (a === -1) ? true : false }
-             
+          test3 = test2.filter((data) => {
+            let a = data.schedules.findIndex(
+              (data2) => data2.timestamp.slice(0, 7) === datefilter
             );
+            return a === -1 ? true : false;
+          });
           break;
       }
-    
-    
-    
-
-
-    
     }
 
     return test3.map((data) => {
       return (
         <L_col>
           <Mold>
-            <HomeCard  data={data} />
+            <HomeCard data={data} />
           </Mold>
         </L_col>
       );
     });
   };
 
-  
   const setallDate = () => {
     return (
       <div style={{ display: "flex" }}>
-        <DateSelect 
+        <DateSelect
           onChange={(e) => {
             setDate(e.target.value);
           }}
@@ -247,16 +214,13 @@ const Home = () => {
           onChange={(e) => {
             setDateFilter(e.target.value);
           }}
-          
         ></input>
       </div>
     );
   };
 
   return (
-    
-    <Wrapper >
-      
+    <Wrapper>
       <Contents>
         <div>
           <div style={{ display: "flex", gap: "5px" }}>
@@ -272,27 +236,44 @@ const Home = () => {
             )}
             <div style={{ display: "flex", gap: "5px" }}>
               <div>
-              <input
-                value={temple}
-                style={{
-                  backgroundColor: "#f5f5dc",
-                  border: "none",
-                  borderRadius: "7px",
-                  margin: "5px",
-                }}
-                onChange={(e) => {autoFilter(e)}}
-                onClick = {() => {setAutoComplete(true)}}
-              />
-              
-              {autoComplete ? <Autoa>
-                {array3.map((arr) => (<Auto><AiOutlineSearch/> <li onClick = {() => {setTemple(arr); setAutoComplete(false)}}>
-                {arr} </li></Auto>))}</Autoa> : <ul></ul>}
+                <input
+                  value={temple}
+                  style={{
+                    backgroundColor: "#f5f5dc",
+                    border: "none",
+                    borderRadius: "7px",
+                    margin: "5px",
+                  }}
+                  onChange={(e) => {
+                    autoFilter(e);
+                  }}
+                  onClick={() => {
+                    setAutoComplete(true);
+                  }}
+                />
+
+                {autoComplete ? (
+                  <Autoa>
+                    {array3.map((arr) => (
+                      <Auto>
+                        <AiOutlineSearch />{" "}
+                        <li
+                          onClick={() => {
+                            setTemple(arr);
+                            setAutoComplete(false);
+                          }}
+                        >
+                          {arr}{" "}
+                        </li>
+                      </Auto>
+                    ))}
+                  </Autoa>
+                ) : (
+                  <ul></ul>
+                )}
+              </div>
             </div>
 
-            </div>
-          
-           
-            
             <AiFillCheckCircle
               onClick={playerChange}
               style={{
@@ -303,28 +284,22 @@ const Home = () => {
               }}
             />
 
-      <DateSelect 
-          onChange={(e) => {
-            setCheckWhich(e.target.value)
-          }}
-        >
-          <option>선택해주세요 </option> 
-          <option> 제목 </option>
-          <option> 가수 </option>
-        </DateSelect>
+            <DateSelect
+              onChange={(e) => {
+                setCheckWhich(e.target.value);
+              }}
+            >
+              <option>선택해주세요 </option>
+              <option> 제목 </option>
+              <option> 가수 </option>
+            </DateSelect>
 
-              
             {playerRender()}
           </div>
-          
-          <L_row >{cardRender()}</L_row>
-         
-      
-      </div>
+          <L_row>{cardRender()}</L_row>
+        </div>
       </Contents>
-     
     </Wrapper>
-    
   );
 };
 
@@ -358,29 +333,25 @@ const Tag = styled.span`
 `;
 
 const DateSelect = styled.select`
-background-color: #f5f5dc;
-border: none;
-border-radius: 7px;
-margin: 5px;
-
-`
+  background-color: #f5f5dc;
+  border: none;
+  border-radius: 7px;
+  margin: 5px;
+`;
 
 const Autoa = styled.ul`
-position : absolute;
-z-index : 3; 
-width : 12%;
-background-color : #f5f5dc; 
-border-radius : 8px;
-`
-
+  position: absolute;
+  z-index: 3;
+  width: 12%;
+  background-color: #f5f5dc;
+  border-radius: 8px;
+`;
 
 const Auto = styled.span`
- display : flex;
- &:hover {
-  background-color : #e9e4cf;
- }
-`
-
-
+  display: flex;
+  &:hover {
+    background-color: #e9e4cf;
+  }
+`;
 
 export default Home;

@@ -5,9 +5,9 @@ import { SiNaver } from "react-icons/si";
 import { useEffect } from "react";
 
 export default function Login() {
-  const NAVER_CLIENT_ID = "J71XESavo8zEzLQDSu3x";
+  const NAVER_CLIENT_ID = "gl0ZZ40v4N4u7AfOZ_74";
   const STATE = "flase";
-  const REDIRECT_URI = "http://localhost:5500/";
+  const REDIRECT_URI = "https://concheese.net/login/oauth2/code/naver";
   const NAVER_AUTH_URL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${NAVER_CLIENT_ID}&state=${STATE}&redirect_uri=${REDIRECT_URI}`;
 
   const NaverLogin = () => {
