@@ -48,7 +48,7 @@ export default function HomeCard({ data  }) {
         </p>
         <p style={{ display: "flex", gap: "35px", margin: "5px 2px 5px" }}>
           <P> 티켓팅날짜</P>
-          <p style={{ fontSize: "12px" }}>{data.ticketings[1].start?.slice(0,10)}</p>
+          <p style={{ fontSize: "12px" }}>{ (data.ticketings.length > 1 ) ? data.ticketings[1].start.slice(0,10) : <p>없음</p> }</p>
         </p>
 
         <p style={{ display: "flex", gap: "10px", margin: "5px 2px 5px " }}>
