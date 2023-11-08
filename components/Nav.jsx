@@ -3,18 +3,44 @@ import logo from "../assets/logo-second.png";
 import styled from "styled-components";
 import { Link, useLocation } from "react-router-dom";
 import { useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
+import { isLoggedIn } from "../recoil/atom";
 
 const Nav = () => {
   const { pathname } = useLocation();
 
   const [searchParams] = useSearchParams();
-  const token = searchParams.get("jwt");
-  console.log("jwt:", token);
-  if (token) {
-    console.log(token);
-  } else {
-    console.log("No jwt parameter found");
-  }
+  const [userName, setUserName] = useState("");
+  const token = searchParams.get("loginId");
+  const [isLog, setIsLog] = useRecoilState(isLoggedIn);
+
+  const getUsers = async () => {
+    if (!token) {
+      return;
+    }
+    const api_url = `https://concheese.net/api/v1/user/info/${token}`;
+
+    const users = await fetch(api_url);
+
+    window.sessionStorage.setItem("token", token);
+    setIsLog(true);
+    const userData = await users.json();
+    setUserName(userData.nickname);
+    window.sessionStorage.setItem("nickname", userData.nickname);
+  };
+
+  useEffect(() => {
+    const session_token = window.sessionStorage.getItem("token");
+    console.log(session_token);
+    console.log(typeof session_token);
+    if (session_token) {
+      setUserName(window.sessionStorage.getItem("nickname"));
+      setIsLog(true);
+    } else {
+      getUsers();
+    }
+  }, []);
 
   return (
     <Navbar>
@@ -40,7 +66,7 @@ const Nav = () => {
           </NavList>
 
           <LogInBtn>
-            {token === null ? (
+            {!isLog ? (
               <Link
                 style={{
                   display: "block",
@@ -61,7 +87,25 @@ const Nav = () => {
                 로그인
               </Link>
             ) : (
-              <p>로그인 완료</p>
+              <div
+                style={{ display: "flex", alignItems: "center", gap: "5px" }}
+              >
+                <Link to={{ pathname: "/myPage" }}>
+                  {userName}님 반갑습니다
+                </Link>
+                <button
+                  style={{
+                    display: "block",
+                    padding: "10px 20px",
+                    backgroundColor: "black",
+                    border: "none",
+                    color: "white",
+                    borderRadius: "8px",
+                  }}
+                >
+                  로그아웃
+                </button>
+              </div>
             )}
           </LogInBtn>
         </NavContents>
@@ -89,7 +133,7 @@ const NavContents = styled.div`
 `;
 
 const NavItem = styled.li`
-  color: ${(props) => (props.p === "true" ? "#f49c5d" : "black")};
+  color: ${(props) => (props.p === true ? "#f49c5d" : "black")};
   &:hover {
     border-top: 3px solid #f49c5d;
   }

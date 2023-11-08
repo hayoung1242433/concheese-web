@@ -51,14 +51,12 @@ const Home = () => {
     result.map((a) => {
       array.push(a.title);
       a.performers.map((b) => {
-        array.push("-" + b.name)
-      })
-       
-          }
-    )
-    
-   const tempArray = [... new Set(array)];
-   const tempArray2 = [... new Set(array2)];
+        array.push("-" + b.name);
+      });
+    });
+
+    const tempArray = [...new Set(array)];
+    const tempArray2 = [...new Set(array2)];
 
     setForm(result);
     setArray(tempArray);
@@ -68,28 +66,25 @@ const Home = () => {
 
   // 값을 저장하고 일치하는 것 출력
   const autoFilter = (e) => {
-    console.log(checkWhich)
+    console.log(checkWhich);
     let fitty = array.filter((arr) => arr.includes(e.target.value));
-    
-    setTemple(e.target.value)
-    setArray3(fitty)
-    
-  }
+
+    setTemple(e.target.value);
+    setArray3(fitty);
+  };
 
   const playerChange = (e) => {
     e.preventDefault();
     setAutoComplete(false);
-    
-    if (temple.length !== 0){
-      if(checkWhich === "가수"){
-        if(performersy !== temple){
-           setPerformers([...performersy , temple])
-        }
-      }
-      else if(checkWhich === "제목"){
-        if(titley !== temple){
-          setTitle([...titley , temple])
 
+    if (temple.length !== 0) {
+      if (checkWhich === "가수") {
+        if (performersy !== temple) {
+          setPerformers([...performersy, temple]);
+        }
+      } else if (checkWhich === "제목") {
+        if (titley !== temple) {
+          setTitle([...titley, temple]);
         }
       }
 
@@ -127,46 +122,45 @@ const Home = () => {
     );
   };
 
- 
-  const getInfo = async ( a , b ) => {
-    try{
-      const result = await getInfoFilter( a , b)
-      return result
-     
-    }
-    catch(error){
+  const getInfo = async (a, b) => {
+    try {
+      const result = await getInfoFilter(a, b);
+      return result;
+    } catch (error) {
       console.error(error);
     }
-  }
+  };
 
-  
   const cardRender = () => {
     let test = form;
     let test2 = form;
     let test3 = form;
-    
-     // 공연자, 공연 이름 filter 
-  if(totalList.length !== 0){
-    console.log(performersy)
-    console.log(titley)
-    if (performersy.length !== 0) {
-      test = performersy.map((p) => { return getInfo( p  , "performer") })
-    } 
-    // 제목 
-    else if(titley.length !== 0 ){
-      test2 = titley.map((t) => { return getInfo(t , "title")})
+
+    // 공연자, 공연 이름 filter
+    if (totalList.length !== 0) {
+      console.log(performersy);
+      console.log(titley);
+      if (performersy.length !== 0) {
+        test = performersy.map((p) => {
+          return getInfo(p, "performer");
+        });
+      }
+      // 제목
+      else if (titley.length !== 0) {
+        test2 = titley.map((t) => {
+          return getInfo(t, "title");
+        });
+      }
+      console.log(test);
+      console.log(test2);
+
+      test3 = test.concat(test2);
+      // 중복 제거 처리
+      console.log(test3);
     }
-    console.log(test)
-    console.log(test2)
+    test3 = form;
 
-    test3 = test.concat(test2)
-    // 중복 제거 처리 
-   console.log(test3)
-
-  }
-  test3 = form;
-   
-   // 날짜 필터 
+    // 날짜 필터
 
     if (datefilter.length !== 0 && date.length !== 0) {
       switch (date) {
@@ -235,7 +229,6 @@ const Home = () => {
     <Wrapper>
       <Contents>
         <div>
-          need to login test
           <div style={{ display: "flex", gap: "5px" }}>
             {checkdate === true ? (
               setallDate()
