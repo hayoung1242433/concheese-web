@@ -19,7 +19,7 @@ export default function Infos({ data }) {
     // 삭제
     const deletehandle = async () => {
         console.log(data.id)
-        try{deleteInfoPost(data.id);
+        try{ await deleteInfoPost(data.id);
             
         }
         catch(err){
